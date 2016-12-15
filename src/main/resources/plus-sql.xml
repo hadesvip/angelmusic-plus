@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<root>
+    <!--二维码-->
+    <sqlGroup name="qrcode">
+        <sql id="getQRcodeBycodeNo">select qrcode_id,qrcode_no from am_qrcode where qrcode_no=?</sql>
+    </sqlGroup>
+
+    <!--跟二维码绑定的客户端-->
+    <sqlGroup name="qrcodeclient">
+        <sql id="getBindClientCount">select count(1) from am_qrcode_client where client_id=?</sql>
+        <sql id="getBindQrodeClientCount">select count(1) from am_qrcode_client where where qrcode_no = ?</sql>
+    </sqlGroup>
+
+</root>

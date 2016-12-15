@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>二维码打印</title>
+    <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    <script src="${baseUrl}/js/uuid.js"></script>
+    <script src="${baseUrl}/js/lodop.js"></script>
+    <script src="${baseUrl}/js/qrcode.min.js"></script>
+
+</head>
+<body>
+
+<h2 style="color: #009999">二维码打印</h2>
+<p>&nbsp;&nbsp;&nbsp;
+    <span color="#009999">&nbsp;●</span>
+    <a href="JavaScript:loopPrint()">打印100张二维码</a>
+</p>
+
+
+<script language="javascript" type="text/javascript">
+
+    function loopPrint() {
+        //采用单条插入，批量的时候防止出错，打印出的二维码定位困难，垃圾数据过多
+        for (var i = 0; i < 2; i++) {
+            var uuid = UUIDjs.create().toString();
+            console.log(uuid);
+            $.ajax({
+                url: '/webapi/qrcode/saveQrcode',
+                type: 'get',
+                async: false,
+                data: {'qrcode': uuid},
+                success: function (data) {
+                    if (data.code == "200") {
+                        printQrcode(uuid);
+                    }
+                },
+                fail: function () {
+                    console.log("发生错误..");
+                }
+            });
+        }
+    }
+
+    function printQrcode(code) {
+        LODOP = getLodop();
+        LODOP.PRINT_INIT("qrcodetask");
+        LODOP.SET_LICENSES("库巴科技（北京）有限公司", "048616562718688748719056235623", "", "");
+        LODOP.SET_PRINT_PAGESIZE(2, "48mm", "28mm", "");
+        LODOP.ADD_PRINT_BARCODE(42, 10, 107, 107, "QRCode", code);
+        LODOP.PRINT();
+    }
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+.classpath
+.mymetadata
+.project
+.settings/
+target/
+src/test/
+.idea/
+angelmusic-plus.iml
