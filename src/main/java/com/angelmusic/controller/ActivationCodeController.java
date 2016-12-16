@@ -3,6 +3,7 @@ package com.angelmusic.controller;
 import com.angelmusic.base.BaseController;
 import com.angelmusic.service.ActivationCodeService;
 import com.angelmusic.utils.HttpCode;
+import com.jfinal.ext.route.ControllerBind;
 import com.jfinal.kit.StrKit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
  * 激活码
  * Created by wangyong on 16-12-15.
  */
+@ControllerBind(controllerKey = "/webapi/activationCode")
 public class ActivationCodeController extends BaseController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -19,8 +21,9 @@ public class ActivationCodeController extends BaseController {
     /**
      * 激活码激活
      */
-    public void activateCode() {
+    public void activate() {
         LOGGER.info("[invoke activationCode method ]");
+
 
         final String activationCode = getPara("activationCode");
         if (StrKit.isBlank(activationCode)) {
