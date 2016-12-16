@@ -11,6 +11,7 @@ import com.jfinal.ext.route.AutoBindRoutes;
 import com.jfinal.ext2.interceptor.ExceptionInterceptorExt;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.druid.DruidPlugin;
+import com.jfinal.plugin.ehcache.EhCachePlugin;
 
 /**
  * 项目配置
@@ -74,6 +75,7 @@ public class AppConfig extends JFinalConfig {
 
         //sql配置文件方式
         me.add(new PlusSqlIXmlPlugin());
+        me.add(new EhCachePlugin());
     }
 
     /**
