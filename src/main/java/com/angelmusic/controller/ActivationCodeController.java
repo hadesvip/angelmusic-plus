@@ -24,6 +24,11 @@ public class ActivationCodeController extends BaseController {
     public void activate() {
         LOGGER.info("[invoke activationCode method ]");
 
+        String method = getRequest().getMethod();
+        if (method.equalsIgnoreCase("get")) {
+            error("此接口只支持post请求");
+            return;
+        }
 
         final String activationCode = getPara("activationCode");
         if (StrKit.isBlank(activationCode)) {
