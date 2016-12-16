@@ -1,14 +1,14 @@
 package com.angelmusic.config;
 
-import com.angelmusic.dao.model.Qrcode;
+import com.angelmusic.interceptor.ExceptionInterceptor;
+import com.angelmusic.interceptor.UserInterceptor;
 import com.angelmusic.plugin.sql.PlusSqlIXmlPlugin;
 import com.jfinal.config.*;
 import com.jfinal.ext.handler.ContextPathHandler;
-import com.jfinal.ext.plugin.sqlinxml.SqlInXmlPlugin;
 import com.jfinal.ext.plugin.tablebind.AutoTableBindPlugin;
 import com.jfinal.ext.plugin.tablebind.ParamNameStyles;
-import com.jfinal.ext.plugin.tablebind.SimpleNameStyles;
 import com.jfinal.ext.route.AutoBindRoutes;
+import com.jfinal.ext2.interceptor.ExceptionInterceptorExt;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.druid.DruidPlugin;
 
@@ -83,7 +83,8 @@ public class AppConfig extends JFinalConfig {
      */
     @Override
     public void configInterceptor(Interceptors me) {
-
+        me.add(new UserInterceptor());
+        me.add(new ExceptionInterceptor());
     }
 
     /**
