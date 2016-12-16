@@ -14,15 +14,22 @@
 <h2 style="color: #009999">二维码打印</h2>
 <p>&nbsp;&nbsp;&nbsp;
     <span color="#009999">&nbsp;●</span>
-    <a href="JavaScript:loopPrint()">打印100张二维码</a>
+    二维码打印张数(建议不要超出打印机纸数):<input id="num" type="text" value="100"/>
+    <br/>
+    <a href="JavaScript:loopPrint()">打印二维码</a>
 </p>
 
 
 <script language="javascript" type="text/javascript">
 
     function loopPrint() {
+
+        var num = $("#num").val().trim();
+        if (num == "") {
+            num = 100;
+        }
         //采用单条插入，批量的时候防止出错，打印出的二维码定位困难，垃圾数据过多
-        for (var i = 0; i < 2; i++) {
+        for (var i = 0; i < num; i++) {
             var uuid = UUIDjs.create().toString();
             console.log(uuid);
             $.ajax({

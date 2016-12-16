@@ -42,7 +42,7 @@ public class QrcodeClient extends Model<QrcodeClient> {
     @Before(Tx.class)
     public boolean bindClientByCode(String clientId, int codeId) {
         return ME
-                .set("client_id", clientId)
+                .set("client_id", clientId.trim())
                 .set("qrcode_id", codeId)
                 .save();
     }
