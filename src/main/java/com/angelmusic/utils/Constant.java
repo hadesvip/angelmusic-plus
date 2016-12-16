@@ -8,4 +8,7 @@ public interface Constant {
 
     //二维码绑定客户端个数上限
     int LIMIT_QRCODE_BINDCOUNT = 5;
+
+    //激活码状态已激活
+    int ACTIVATION_CODE_ACTIVATED = 2;
 }

@@ -2,8 +2,10 @@ package com.angelmusic.dao.model;
 
 
 import com.angelmusic.plugin.sql.PlusSqlKit;
+import com.jfinal.aop.Before;
 import com.jfinal.ext.plugin.tablebind.TableBind;
 import com.jfinal.plugin.activerecord.Model;
+import com.jfinal.plugin.activerecord.tx.Tx;
 
 /**
  * 二维码
@@ -30,6 +32,7 @@ public class Qrcode extends Model<Qrcode> {
      * @param qrcode 二维码
      * @return
      */
+    @Before(Tx.class)
     public boolean saveQRcode(String qrcode) {
         ME.set("qrcode_id", null);
         return ME.set("qrcode_no", qrcode).save();

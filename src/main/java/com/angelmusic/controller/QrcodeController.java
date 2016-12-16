@@ -118,5 +118,4 @@ public class QrcodeController extends BaseController {
         error();
     }
 
-
 }

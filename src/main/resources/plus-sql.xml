@@ -12,4 +12,10 @@
         <sql id="getBindQrodeClientCount">select count(1) from am_qrcode_client where where qrcode_no = ?</sql>
     </sqlGroup>
 
+    <!--激活码-->
+    <sqlGroup name="activationCode">
+        <sql id="getActivationCodeByCode">select id,code,status from am_activation_code where code =?</sql>
+        <sql id="updateActivationCodeStatus">update am_activation_code set status=? where code=?</sql>
+    </sqlGroup>
+
 </root>

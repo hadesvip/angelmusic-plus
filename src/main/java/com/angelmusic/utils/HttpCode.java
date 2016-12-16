@@ -13,7 +13,7 @@ public interface HttpCode {
 
     //操作失败
     String FAIL = "201";
-    String FAIL_WORD = "操作失败";
+    String FAIL_WORD = "服务器异常";
 
 
     //客户端编号为空
@@ -43,5 +43,18 @@ public interface HttpCode {
     // 绑定成功
     String CODE_NO_BIND_CLIENT_SUCESS_WORD = "客户端绑定成功";
 
+    //激活码参数为空
+    String ACTIVATION_CODE_EMPTY = "201218";
+    String ACTIVATION_CODE_EMPTY_WORD = "激活码参数为空";
+
+    //激活码已经激活过了
+    String ACTIVATION_CODE_ACTIVATED = "201219";
+    String ACTIVATION_CODE_ACTIVATED_WORD = "激活码已经激活过了";
+
+    //激活码不存在
+    String ACTIVATION_CODE_NOT_EXISTS = "201220";
+    String ACTIVATION_CODE_NOT_EXISTS_WORD = "激活码不存在";
+
+    String ACTIVATION_CODE_ACTIVATED_OK = "激活码激活成功";
 
 }
