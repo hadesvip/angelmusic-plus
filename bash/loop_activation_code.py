@@ -37,7 +37,7 @@ def loop_save_activation_code():
     print '生成的编号:' + str(values)
 
     try:
-        # 往数据库表中存入二维码的编号
+        # 往数据库表中存入激活码
         sql = "insert into am_activation_code(code,status) VALUES (%s,1)"
         mysql_conn()
         cur.executemany(sql, values)
@@ -48,7 +48,7 @@ def loop_save_activation_code():
     finally:
         mysql_conn_close()
         print '关闭数据库连接'
-
+    print '生成批量激活码结束...'
 
 if __name__ == '__main__':
     loop_save_activation_code()
