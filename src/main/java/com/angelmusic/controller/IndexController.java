@@ -14,10 +14,4 @@ public class IndexController extends BaseController {
         render("index.html");
     }
 
-    public void invoke() {
-        Integer num = null;
-        System.out.println(num.byteValue());
-        renderJson("hello,world");
-    }
-
 }
