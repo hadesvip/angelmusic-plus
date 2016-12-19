@@ -14,7 +14,7 @@ import com.jfinal.plugin.activerecord.tx.Tx;
  */
 public class QrcodeService {
 
-    public static QrcodeService QRCODESERVICE = new QrcodeService();
+    public final static QrcodeService QRCODESERVICE = new QrcodeService();
 
 
     /**
