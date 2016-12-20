@@ -39,3 +39,20 @@ create table am_recharge_record(
   key recharge_record_index(user_id)
 )engine =innodb default charset =utf8 comment '充值记录表';
 
+
+create table am_course(
+  course_id int primary key not null comment '课程编号',
+  course_month int not null comment '课程月份',
+  course_key  varchar(64) not null comment '课程秘钥',
+  course_url varchar(64) not null  comment '课程地址',
+  key course_month_index(course_month)
+)engine = innodb default charset =utf8 comment '课程表';
+
+create table am_course_subscribe(
+  course_subscribe_id int not null primary key comment '订阅编号',
+  user_id int not null comment '用户编号',
+  course_id int not null comment '课程编号',
+  unique key uq_cse_sbe_user_cse_id_index (user_id,course_id)
+)engine =innodb default charset =utf8 comment '课程订阅表';
+
+
