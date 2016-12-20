@@ -24,7 +24,7 @@ create table am_activation_code(
 create table am_user (
   user_id int not null primary key AUTO_INCREMENT comment '用户编号',
   user_name varchar(16) comment '用户名',
-  user_phone int not null comment '用户手机号码',
+  user_phone VARCHAR(11) not null comment '用户手机号码',
   total_recharge int comment '累计消费金额',
   create_date DATETIME comment '用户创建时间',
   unique key uq_user_phone_index (user_phone)
@@ -60,7 +60,7 @@ create table am_order_record(
   order_id varchar(64) not null PRIMARY KEY  comment '订单号',
   user_id int not null COMMENT  '用户编号',
   money decimal(2) not null comment '本次充值金额',
-  order_date datetime not null default now() comment '本次充值时间',
+  order_date datetime not null default now() comment '消费时间',
   type  int not null comment  '支付类型:激活码1，大礼包2',
   product_id int not null comment '激活码或者大礼包编号',
   pay_result int not null comment '支付结果1成功2失败',
@@ -68,7 +68,7 @@ create table am_order_record(
 )engine =innodb default charset =utf8 comment '订单记录';
 
 create table am_content(
-  content_id int not null primary key comment '内容编号',
+  content_id int not null primary key AUTO_INCREMENT comment '内容编号',
   name varchar(12) not null comment '内容名称',
   content_desc varchar(64)  comment '内容描述',
   course_name varchar(12)  comment '课程名称',

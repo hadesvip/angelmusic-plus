@@ -38,7 +38,7 @@ def loop_save_activation_code():
 
     try:
         # 往数据库表中存入激活码
-        sql = "insert into am_activation_code(code,status) VALUES (%s,1)"
+        sql = "insert into am_activation_code(code,effective_time,status) VALUES (%s,default,1)"
         mysql_conn()
         cur.executemany(sql, values)
         db.commit()

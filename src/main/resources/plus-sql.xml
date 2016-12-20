@@ -18,4 +18,8 @@
         <sql id="updateActivationCodeStatus">update am_activation_code set status=? where code=?</sql>
     </sqlGroup>
 
+    <sqlGroup name="user">
+        <sql id="getUserByPhone">select user_id,user_name,user_phone,create_date,total_recharge from am_user</sql>
+    </sqlGroup>
+
 </root>

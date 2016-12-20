@@ -57,4 +57,17 @@ public interface HttpCode {
 
     String ACTIVATION_CODE_ACTIVATED_OK = "激活码激活成功";
 
+    //手机号码为空
+    String USER_PHONE_EMPTY = "201221";
+    String USER_PHONE_EMPTY_WORD = "用户手机号码为空";
+
+    //上传用户信息成功
+    String UPLOAD_USERINFO_SUCCESS_WORD = "上传用户信息成功";
+
+    //上传用户信息失败
+    String UPLOAD_USERINFO_FAIL_WORD = "上传用户信息失败";
+
+    //用户已经长传过
+    String UPLOAD_USER_EXISTS="201222";
+    String UPLOAD_USER_EXISTS_WORD = "用户信息已经存在";
 }
