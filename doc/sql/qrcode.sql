@@ -28,7 +28,6 @@ create table am_user (
   unique key uq_user_phone_index (user_phone)
 )engine = innodb default charset =utf8 comment '用户信息表';
 
-
 create table am_recharge_record(
   recharge_record_id int not null primary key comment '充值记录编号',
   user_id int not null comment '用户编号',
@@ -38,7 +37,6 @@ create table am_recharge_record(
   recharge_type  int not null comment  '充值方式',
   key recharge_record_index(user_id)
 )engine =innodb default charset =utf8 comment '充值记录表';
-
 
 create table am_course(
   course_id int primary key not null comment '课程编号',
