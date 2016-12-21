@@ -18,8 +18,30 @@
         <sql id="updateActivationCodeStatus">update am_activation_code set status=? where code=?</sql>
     </sqlGroup>
 
+    <!--用户信息-->
     <sqlGroup name="user">
         <sql id="getUserByPhone">select user_id,user_name,user_phone,create_date,total_recharge from am_user</sql>
     </sqlGroup>
+
+    <!--主题信息-->
+    <sqlGroup name="topic">
+        <sql id="allTopic">select topic_id,name,topic_desc,topic_date,free from am_topic order by topic_date</sql>
+        <sql id="getNotFreeTopicCount">select count(1) from am_topic where free=1</sql>
+    </sqlGroup>
+
+    <!--获取用户订购成功的最新的订单记录-->
+    <sqlGroup name="order">
+        <sql id="getOrderCountByUserId">select count(1) from am_order_record order by order_date desc where user_id=?
+            and payresult=1
+        </sql>
+        <sql id="getOrderList">select * from am_order_record where pay_result =1 and user_id=?</sql>
+        <sql id="updateOrderRecord">update am_order_record set pay_result =? where order_id=? and user_id=?</sql>
+    </sqlGroup>
+
+    <!--大礼包-->
+    <sqlGroup name="giftPack">
+        <sql id="getGiftPackByName">select * from am_gift_pack where gift_pack_name=?</sql>
+    </sqlGroup>
+
 
 </root>

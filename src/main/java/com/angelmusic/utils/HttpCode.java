@@ -68,6 +68,37 @@ public interface HttpCode {
     String UPLOAD_USERINFO_FAIL_WORD = "上传用户信息失败";
 
     //用户已经长传过
-    String UPLOAD_USER_EXISTS="201222";
+    String UPLOAD_USER_EXISTS = "201222";
     String UPLOAD_USER_EXISTS_WORD = "用户信息已经存在";
+
+    //主题加载成功
+    String TOPICS_LOAD_SUCCESS_WORD = "主题加载成功";
+
+    //用户编号为空
+    String USERID_EMPTY = "201223";
+    String USERID_EMPTY_WORD = "用户编号为空";
+
+    //订单生成成功
+    String ORDER_RECORD_SAVE_SUCESS_WORD = "订单生成成功";
+
+    //订单生成失败
+    String ORDER_RECORD_CREATE_FAIL = "201224";
+    String ORDER_RECORD_CREATE_FAIL_WORD = "订单生成失败";
+
+    //参数异常
+    String PARAMS_INVAILD = "201225";
+    String CREATEORDERRECORD_PARAMS_INVAILD = "用户编号,消费金额，产品，支付类型不可以为空";
+
+    //订单金额不可以小于0
+    String ORDER_RECORD_MONEY_LESS_ZERO_WORD = "201225";
+
+    //订单类型只能是激活码和大礼包
+    String ORDER_TYPE_OVER_WORD = "订单类型只能是激活码和大礼包";
+
+    //订单更新成功
+    String ORDER_UPDATE_SCUCESS_WORD = "订单更新成功";
+
+    //订单更新失败
+    String ORDER_UPDATE_FAIL = "201226";
+    String ORDER_UPDATE_FAIL_WORD = "订单更新失败";
 }

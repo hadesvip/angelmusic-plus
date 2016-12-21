@@ -28,6 +28,7 @@
         <mariadb.version>1.5.5</mariadb.version>
         <freemarker.version>2.3.20</freemarker.version>
         <ehcache.version>2.10.3</ehcache.version>
+        <joda.version>2.9.7</joda.version>
     </properties>
     <dependencies>
 
@@ -116,6 +117,11 @@
             <version>${ehcache.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${joda.version}</version>
+        </dependency>
 
     </dependencies>
     <build>

@@ -18,6 +18,20 @@ public class User extends Model<User> {
     public static final User ME = new User();
 
     /**
+     * 用户购买了多少个月
+     */
+    private int buyMonths;
+
+    public int getBuyMonths() {
+        return buyMonths;
+    }
+
+    public User setBuyMonths(int buyMonths) {
+        this.buyMonths = buyMonths;
+        return this;
+    }
+
+    /**
      * 上传用户信息
      *
      * @param userPhone 用户手机号
