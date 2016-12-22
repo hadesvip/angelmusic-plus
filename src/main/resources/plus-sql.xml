@@ -27,6 +27,7 @@
     <sqlGroup name="topic">
         <sql id="allTopic">select topic_id,name,topic_desc,topic_date,free from am_topic order by topic_date</sql>
         <sql id="getNotFreeTopicCount">select count(1) from am_topic where free=1</sql>
+        <sql id="getTopic">select * from am_topic where topic_id=?</sql>
     </sqlGroup>
 
     <!--获取用户订购成功的最新的订单记录-->
@@ -35,12 +36,19 @@
             and payresult=1
         </sql>
         <sql id="getOrderList">select * from am_order_record where pay_result =1 and user_id=?</sql>
-        <sql id="updateOrderRecord">update am_order_record set pay_result =? where order_id=? and user_id=?</sql>
+        <sql id="updateOrderRecord">update am_order_record set pay_result =? where order_id=?</sql>
     </sqlGroup>
 
     <!--大礼包-->
     <sqlGroup name="giftPack">
         <sql id="getGiftPackByName">select * from am_gift_pack where gift_pack_name=?</sql>
+    </sqlGroup>
+
+    <!--内容-->
+    <sqlGroup name="content">
+        <sql id="getTopicContentList">select * from am_topic_content tc left join am_content c on tc.content_id =
+            c.content_id where tc.topic_id =1 order by `order`
+        </sql>
     </sqlGroup>
 
 

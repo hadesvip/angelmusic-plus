@@ -1,7 +1,5 @@
 package com.angelmusic.service;
 
-import com.angelmusic.dao.model.ActivationCode;
-import com.angelmusic.dao.model.GiftPack;
 import com.angelmusic.dao.model.OrderRecord;
 import com.angelmusic.dao.model.Topic;
 import com.angelmusic.utils.Constant;
@@ -36,33 +34,13 @@ public class TopicService {
         final List<OrderRecord> userOrderList = OrderService.ORDERSERVICE.getUserOrderList(userId);
 
         //计算出用户总共买了几个月
-        final int[] buyMonths = {0};
-        userOrderList.forEach(orderRecord -> {
-            int orderType = orderRecord.getInt("type");
-            String product = orderRecord.getStr("product");
+        final int buyMonths = OrderService.ORDERSERVICE.userMonths(userId);
 
-            //激活码
-            if (orderType == Constant.ORDER_TYPE_ACTIVATECODE) {
-                final ActivationCode activationCode = ActivationCode.ME.getActivationCodeByCode(product);
-                if (activationCode != null) {
-                    int effectiveTime = activationCode.getInt("effective_time");
-                    buyMonths[0] += effectiveTime;
-                }
-            }
-            //大礼包
-            else {
-                GiftPack giftPack = GiftPack.ME.getGiftPackByName(product);
-                if (giftPack != null) {
-                    int effectiveTime = giftPack.getInt("effective_time");
-                    buyMonths[0] += effectiveTime;
-                }
-            }
-        });
 
         //用户总共买了多少个月
         //int buyMonths = userOrderList.size() * 12;
         final int[] count = {0};
-        topics.stream().filter(topic -> topic.getInt("free") == Constant.TOPIC_UNFREE && buyMonths[0] > 0)
+        topics.stream().filter(topic -> topic.getInt("free") == Constant.TOPIC_UNFREE && buyMonths > 0)
                 .forEach(topic -> {
                     count[0]++;
                     //主题时间
@@ -72,7 +50,7 @@ public class TopicService {
                     int nowMillis = DateTime.now().getYear() + DateTime.now().getMonthOfYear();
 
                     //是否在当前时间之前开区间
-                    if (topicMillis <= nowMillis && buyMonths[0] >= count[0]) {
+                    if (topicMillis <= nowMillis && buyMonths >= count[0]) {
                         topic.setLock(Constant.TOPIC_UNLOCKED);
                     }
                 });

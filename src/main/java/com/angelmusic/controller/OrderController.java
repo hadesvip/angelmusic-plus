@@ -2,8 +2,10 @@ package com.angelmusic.controller;
 
 import com.angelmusic.base.BaseController;
 import com.angelmusic.service.OrderService;
+import com.angelmusic.service.RechargeRecordService;
 import com.angelmusic.utils.Constant;
 import com.angelmusic.utils.HttpCode;
+import com.jfinal.ext.route.ControllerBind;
 import com.jfinal.kit.StrKit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory;
  * 订单
  * Created by wangyong on 16-12-21.
  */
+@ControllerBind(controllerKey = "webapi/order")
 public class OrderController extends BaseController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(QrcodeController.class);
@@ -21,6 +24,12 @@ public class OrderController extends BaseController {
      */
     public void createOrderRecord() {
         LOGGER.info("[invoke createOrderRecord]");
+
+        String method = getRequest().getMethod();
+        if (method.equalsIgnoreCase("get")) {
+            error("此接口只支持post请求");
+            return;
+        }
 
         String userId = getPara("userId");
         String money = getPara("money");
@@ -61,14 +70,55 @@ public class OrderController extends BaseController {
     public void updateOrderPayResult() {
         LOGGER.info("[invoke updateOrderPayResult]");
 
-        String userId = getPara("userId");
+        String method = getRequest().getMethod();
+        if (method.equalsIgnoreCase("get")) {
+            error("此接口只支持post请求");
+            return;
+        }
+
+        //String userId = getPara("userId");
         String orderId = getPara("orderId");
         String payResult = getPara("payResult");
 
         //更新订单
-        renderJson(OrderService.ORDERSERVICE.updateOrderRecord(userId, orderId, payResult));
+        renderJson(OrderService.ORDERSERVICE.updateOrderRecord(orderId, payResult));
 
         LOGGER.info("[leave updateOrderPayResult]");
+    }
+
+
+    /**
+     * 同步统接sdk充值流水
+     */
+    public void synTJsdkRechargeRecord() {
+        LOGGER.info("invoke synTJsdkRechargeRecord");
+
+        String method = getRequest().getMethod();
+        if (method.equalsIgnoreCase("get")) {
+            error("此接口只支持post请求");
+            return;
+        }
+
+        //订单号，订单状态，订单状态描述，订单价格(分)，透传参数，支付类型，加密校验参数
+        String linkId = getPara("linkid");
+        String chargeStatus = getPara("chargestatus");
+        String chargeMsg = getPara("chargemsg");
+        long price = getParaToLong("price");
+        String cpParam = getPara("cpparam");
+        String payType = getPara("paytype");
+        String encryptData = getPara("encryptdata");
+
+        //校验密码
+        if (!Constant.TJSDK_ENCRYPTDATA.equals(encryptData)) {
+            error(HttpCode.TJ_ENCRYPTDATA_ERROR, HttpCode.TJ_ENCRYPTDATA_ERROR_WORD);
+            return;
+        }
+
+        //保存充值流水
+        RechargeRecordService.RECHARGERECORDSERVICE.saveRechargeRecord(linkId, chargeStatus, chargeMsg, price, cpParam, payType);
+
+
+        LOGGER.info("[leave synTJsdkRechargeRecord]");
     }
 
 

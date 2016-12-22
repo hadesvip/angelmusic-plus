@@ -47,4 +47,14 @@ public class Topic extends Model<Topic> {
         return Db.queryInt(PlusSqlKit.sql("getNotFreeTopicCount"));
     }
 
+    /**
+     * 获取主题信息
+     *
+     * @param topicId 主题编号
+     * @return
+     */
+    public Topic getTopic(int topicId) {
+        return ME.findById(topicId);
+    }
+
 }

@@ -1,6 +1,9 @@
 package com.angelmusic.service;
 
+import com.angelmusic.dao.model.ActivationCode;
+import com.angelmusic.dao.model.GiftPack;
 import com.angelmusic.dao.model.OrderRecord;
+import com.angelmusic.utils.Constant;
 import com.angelmusic.utils.HttpCode;
 import com.angelmusic.utils.HttpResult;
 import com.jfinal.aop.Before;
@@ -53,20 +56,54 @@ public class OrderService {
     /**
      * 更新订单支付结果
      *
-     * @param userId    用户编号
      * @param orderId   订单编号
      * @param payResult 支付结果
      * @return
      */
     @Before(Tx.class)
-    public HttpResult updateOrderRecord(String userId, String orderId, String payResult) {
+    public HttpResult updateOrderRecord(String orderId, String payResult) {
 
         //更新成功
-        if (OrderRecord.ME.updatePayResult(userId, orderId, payResult)) {
+        if (OrderRecord.ME.updatePayResult(orderId, payResult)) {
             return new HttpResult(HttpCode.SUCCESS, HttpCode.ORDER_UPDATE_SCUCESS_WORD);
         }
 
         return new HttpResult(HttpCode.ORDER_RECORD_CREATE_FAIL, HttpCode.ORDER_RECORD_CREATE_FAIL_WORD);
+    }
+
+    /**
+     * 计算出用户总共几个月
+     *
+     * @param userId 用户编号
+     * @return
+     */
+    public int userMonths(String userId) {
+
+        //计算出用户总共买了几个月
+        final int[] buyMonths = {0};
+        OrderRecord.ME.getUserOrderList(userId).forEach(orderRecord -> {
+            int orderType = orderRecord.getInt("type");
+            String product = orderRecord.getStr("product");
+
+            //激活码
+            if (orderType == Constant.ORDER_TYPE_ACTIVATECODE) {
+                final ActivationCode activationCode = ActivationCode.ME.getActivationCodeByCode(product);
+                if (activationCode != null) {
+                    int effectiveTime = activationCode.getInt("effective_time");
+                    buyMonths[0] += effectiveTime;
+                }
+            }
+            //大礼包
+            else {
+                GiftPack giftPack = GiftPack.ME.getGiftPackByName(product);
+                if (giftPack != null) {
+                    int effectiveTime = giftPack.getInt("effective_time");
+                    buyMonths[0] += effectiveTime;
+                }
+            }
+        });
+
+        return buyMonths[0];
     }
 
 

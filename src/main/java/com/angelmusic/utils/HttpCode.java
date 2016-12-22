@@ -101,4 +101,11 @@ public interface HttpCode {
     //订单更新失败
     String ORDER_UPDATE_FAIL = "201226";
     String ORDER_UPDATE_FAIL_WORD = "订单更新失败";
+
+    //统接密码不正确
+    String TJ_ENCRYPTDATA_ERROR = "201227";
+    String TJ_ENCRYPTDATA_ERROR_WORD = "统接密码不正确";
+
+    //主题编号和用户编号不能为空
+    String TOPIC_USER_EMPTY_WORD = "主题编号和用户编号不能为空";
 }

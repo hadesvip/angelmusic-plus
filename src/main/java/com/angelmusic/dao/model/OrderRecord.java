@@ -72,11 +72,10 @@ public class OrderRecord extends Model<OrderRecord> {
     }
 
     /**
-     * @param userId    用户编号
      * @param orderId   订单编号
      * @param payResult 支付结果
      */
-    public boolean updatePayResult(String userId, String orderId, String payResult) {
-        return Db.update(PlusSqlKit.sql("order.updateOrderRecord"), payResult, orderId, userId) > 0;
+    public boolean updatePayResult(String orderId, String payResult) {
+        return Db.update(PlusSqlKit.sql("order.updateOrderRecord"), payResult, orderId) > 0;
     }
 }

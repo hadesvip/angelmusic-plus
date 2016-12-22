@@ -27,6 +27,9 @@ public interface Constant {
     //主题收费
     int TOPIC_UNFREE = 1;
 
+    //主题免费
+    int TOPIC_FREE = 2;
+
     //支付成功
     int PAY_SUCESS = 1;
 
@@ -36,4 +39,6 @@ public interface Constant {
     //支付中
     int PAY_PAYING = 3;
 
+    //统接加密
+    String TJSDK_ENCRYPTDATA = "00c2ba5facc11ba8842144bfcdc15869";
 }
