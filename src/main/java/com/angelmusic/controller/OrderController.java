@@ -31,7 +31,7 @@ public class OrderController extends BaseController {
             return;
         }
 
-        String userId = getPara("userId");
+        String userPhone = getPara("userPhone");
         String money = getPara("money");
 
         // 产品:二维码编号，或者大礼包
@@ -40,7 +40,7 @@ public class OrderController extends BaseController {
         int type = getParaToInt("type");
 
         //参数校验
-        if (StrKit.isBlank(userId) || StrKit.isBlank(money) || StrKit.isBlank(product) || type <= 0) {
+        if (StrKit.isBlank(userPhone) || StrKit.isBlank(money) || StrKit.isBlank(product) || type <= 0) {
             error(HttpCode.PARAMS_INVAILD, HttpCode.CREATEORDERRECORD_PARAMS_INVAILD);
             return;
         }
@@ -58,7 +58,7 @@ public class OrderController extends BaseController {
         }
 
         //创建订单
-        renderJson(OrderService.ORDERSERVICE.createOrderRecord(userId, money, product, type));
+        renderJson(OrderService.ORDERSERVICE.createOrderRecord(userPhone, money, product, type));
 
         LOGGER.info("[leave createOrderRecord]");
     }
@@ -116,7 +116,6 @@ public class OrderController extends BaseController {
 
         //保存充值流水
         RechargeRecordService.RECHARGERECORDSERVICE.saveRechargeRecord(linkId, chargeStatus, chargeMsg, price, cpParam, payType);
-
 
         LOGGER.info("[leave synTJsdkRechargeRecord]");
     }

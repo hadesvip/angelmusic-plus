@@ -32,11 +32,11 @@
 
     <!--获取用户订购成功的最新的订单记录-->
     <sqlGroup name="order">
-        <sql id="getOrderCountByUserId">select count(1) from am_order_record order by order_date desc where user_id=?
+        <sql id="getOrderCountByUserId">select count(1) from am_order_record order by order_date desc where userPhone=?
             and payresult=1
         </sql>
-        <sql id="getOrderList">select * from am_order_record where pay_result =1 and user_id=?</sql>
-        <sql id="updateOrderRecord">update am_order_record set pay_result =? where order_id=?</sql>
+        <sql id="getOrderList">select * from am_order_record where pay_result =1 and userPhone=?</sql>
+        <sql id="updateOrderRecord">update am_order_record set pay_result =? where userPhone=?</sql>
     </sqlGroup>
 
     <!--大礼包-->
@@ -46,9 +46,19 @@
 
     <!--内容-->
     <sqlGroup name="content">
-        <sql id="getTopicContentList">select * from am_topic_content tc left join am_content c on tc.content_id =
-            c.content_id where tc.topic_id =1 order by `order`
+        <sql id="getTopicContentList">select * from am_topic_content tc left join am_content c on tc.content_id =c.content_id where tc.topic_id =1 order by `order`
         </sql>
+    </sqlGroup>
+
+    <!--内容关卡-->
+    <sqlGroup name="contentMission">
+        <sql id="getContentMission">select * from am_content_mission where userPhone=? and topic_content_id=?</sql>
+        <sql id="updateContentMission">update am_content_mission set game_mission=?,course_mission=? where user_phone=? and topic_content_id=?</sql>
+    </sqlGroup>
+
+    <!--主题内容-->
+    <sqlGroup name="topicContent">
+        <sql id="getTopicContent">select * from am_topic_content where topic_id=? and content_id=?</sql>
     </sqlGroup>
 
 

@@ -34,20 +34,20 @@ public class OrderService {
     /**
      * 创建订单记录
      *
-     * @param userId  用户编号
-     * @param money   消费金额
-     * @param product 产品
-     * @param type    支付类型
+     * @param userPhone 用户手机号
+     * @param money     消费金额
+     * @param product   产品
+     * @param type      支付类型
      * @return
      */
     @Before(Tx.class)
-    public HttpResult createOrderRecord(String userId, String money, String product, int type) {
+    public HttpResult createOrderRecord(String userPhone, String money, String product, int type) {
 
         //订单号
         String orderId = UUID.randomUUID().toString();
 
         //成功订单成功
-        if (OrderRecord.ME.saveOrderRecord(orderId, userId, money, product, type)) {
+        if (OrderRecord.ME.saveOrderRecord(orderId, userPhone, money, product, type)) {
             return new HttpResult(HttpCode.SUCCESS, HttpCode.ORDER_RECORD_SAVE_SUCESS_WORD, OrderRecord.ME);
         }
         return new HttpResult(HttpCode.ORDER_RECORD_CREATE_FAIL, HttpCode.ORDER_RECORD_CREATE_FAIL_WORD);
@@ -74,14 +74,14 @@ public class OrderService {
     /**
      * 计算出用户总共几个月
      *
-     * @param userId 用户编号
+     * @param userPhone 用户手机号
      * @return
      */
-    public int userMonths(String userId) {
+    public int userMonths(String userPhone) {
 
         //计算出用户总共买了几个月
         final int[] buyMonths = {0};
-        OrderRecord.ME.getUserOrderList(userId).forEach(orderRecord -> {
+        OrderRecord.ME.getUserOrderList(userPhone).forEach(orderRecord -> {
             int orderType = orderRecord.getInt("type");
             String product = orderRecord.getStr("product");
 

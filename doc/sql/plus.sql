@@ -60,13 +60,13 @@ create table am_gift_pack(
 
 create table am_order_record(
   order_id varchar(64) not null PRIMARY KEY  comment '订单号',
-  user_id int not null COMMENT  '用户编号',
+  user_phone varchar(11) not null comment '用户手机号',
   money decimal(2) not null comment '本次充值金额',
   order_date datetime not null default now() comment '消费时间',
   `type` int not null comment  '支付类型:激活码1，大礼包2',
   product int not null comment '激活码或者大礼包编号',
   pay_result int not null comment '支付结果1成功2失败3支付中',
-  key order_record_index(user_id)
+  key order_record_index(user_phone)
 )engine =innodb default charset =utf8 comment '订单记录';
 
 create table am_content(
@@ -77,6 +77,7 @@ create table am_content(
 )engine =innodb default charset =utf8 comment '主题内容';
 
 create table am_topic_content(
+  topic_content_id int not null PRIMARY KEY AUTO_INCREMENT COMMENT '主键编号',
   topic_id int not null comment '主题编号',
   content_id int not null comment '内容编号',
   course_name varchar(12)  comment '课程名称',
@@ -86,3 +87,11 @@ create table am_topic_content(
   `order` int not null comment '顺序',
   unique key uq_topic_content_index (topic_id,content_id)
 )engine =innodb default charset =utf8 comment '主题内容关系';
+
+create table am_content_mission(
+  content_mission_id int not null primary key AUTO_INCREMENT comment '主键编号',
+  user_phone varchar(11) not null comment '用户手机号',
+  topic_content_id int not null comment '主题内容关系编号',
+  game_mission int not null default 1 comment '1未完成2完成',
+  course_mission int not null default 1 comment '1未完成2完成'
+)engine = innodb default charset = utf8 comment '内容关卡表';

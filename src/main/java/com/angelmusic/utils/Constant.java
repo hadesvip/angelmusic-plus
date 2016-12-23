@@ -12,11 +12,11 @@ public interface Constant {
     //激活码状态已激活
     int ACTIVATION_CODE_ACTIVATED = 2;
 
-    //主题锁住
-    int TOPIC_LOCKED = 1;
+    //锁住
+    int LOCKED = 1;
 
-    //主题未锁住
-    int TOPIC_UNLOCKED = 2;
+    //未锁住
+    int UNLOCKED = 2;
 
     //订单类型:激活码
     int ORDER_TYPE_ACTIVATECODE = 1;
@@ -41,4 +41,10 @@ public interface Constant {
 
     //统接加密
     String TJSDK_ENCRYPTDATA = "00c2ba5facc11ba8842144bfcdc15869";
+
+    //关卡完成
+    int MISSION_COMPLETE = 2;
+
+    //关卡未完成
+    int MISSION_UNCOMPLETE = 1;
 }

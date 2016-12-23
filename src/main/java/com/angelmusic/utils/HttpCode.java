@@ -107,5 +107,18 @@ public interface HttpCode {
     String TJ_ENCRYPTDATA_ERROR_WORD = "统接密码不正确";
 
     //主题编号和用户编号不能为空
-    String TOPIC_USER_EMPTY_WORD = "主题编号和用户编号不能为空";
+    String TOPIC_USER_EMPTY_WORD = "主题编号和用户手机号不能为空";
+
+    //用户手机号不可以为空
+    String MOBILE_EMPTY_WORD = "用户手机号不可以为空";
+
+    //关卡状态只有完成和未完成两个状态
+    String MISSION_STATUS_OVER_WORD = "关卡状态只能有完成和未完成两个状态";
+
+    //关卡更新成功
+    String MISSION_UPDATE_SUCCESS_WORD = "关卡状态更新成功";
+
+    //关卡更新失败
+    String MISSION_UPDATE_FAIL_WORD = "关卡更新失败";
+
 }

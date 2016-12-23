@@ -21,38 +21,38 @@ public class OrderRecord extends Model<OrderRecord> {
     /**
      * 根据用户编号获取订单记录数
      *
-     * @param userId 用户编号
+     * @param userPhone 用户手机号
      * @return
      */
-    public int getOrderCountByUserId(String userId) {
-        return Db.queryInt(PlusSqlKit.sql("order.getOrderCountByUserId"), userId);
+    public int getOrderCountByUserId(String userPhone) {
+        return Db.queryInt(PlusSqlKit.sql("order.getOrderCountByUserId"), userPhone);
     }
 
     /**
      * 获取用户订单记录
      *
-     * @param userId 用户编号
+     * @param userPhone 用户手机号
      * @return
      */
-    public List<OrderRecord> getUserOrderList(String userId) {
-        return ME.find(PlusSqlKit.sql("order.getOrderList"), userId);
+    public List<OrderRecord> getUserOrderList(String userPhone) {
+        return ME.find(PlusSqlKit.sql("order.getOrderList"), userPhone);
     }
 
 
     /**
      * 保存订单
      *
-     * @param orderId 订单编号
-     * @param userId  用户编号
-     * @param money   消费金额
-     * @param product 产品
-     * @param type    订单类型
+     * @param orderId   订单编号
+     * @param userPhone 用户手机号
+     * @param money     消费金额
+     * @param product   产品
+     * @param type      订单类型
      */
-    public boolean saveOrderRecord(String orderId, String userId, String money, String product, int type) {
+    public boolean saveOrderRecord(String orderId, String userPhone, String money, String product, int type) {
         return
                 ME
                         .set("order_id", orderId)
-                        .set("user_id", userId)
+                        .set("userPhone", userPhone)
                         .set("money", money)
                         .set("product", product)
                         .set("order_date", new Date())

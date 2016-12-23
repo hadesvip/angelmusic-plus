@@ -18,7 +18,7 @@ public class Topic extends Model<Topic> {
     public final static Topic ME = new Topic();
 
     //当前用户主题是否锁住1锁住2未锁
-    private int lock = Constant.TOPIC_LOCKED;
+    private int lock = Constant.LOCKED;
 
     public int getLock() {
         return lock;

@@ -1,6 +1,5 @@
 package com.angelmusic.service;
 
-import com.angelmusic.dao.model.OrderRecord;
 import com.angelmusic.dao.model.Topic;
 import com.angelmusic.utils.Constant;
 import com.angelmusic.utils.HttpCode;
@@ -25,43 +24,24 @@ public class TopicService {
      * @return
      */
     public HttpResult loadTopicList(String userId) {
-
         //加载所有主题
         List<Topic> topics = Topic.ME.topics();
-
-        //用户消费记录数
-        //int orderCount = OrderRecord.ME.getOrderCountByUserId(userId);
-        final List<OrderRecord> userOrderList = OrderService.ORDERSERVICE.getUserOrderList(userId);
 
         //计算出用户总共买了几个月
         final int buyMonths = OrderService.ORDERSERVICE.userMonths(userId);
 
-
-        //用户总共买了多少个月
-        //int buyMonths = userOrderList.size() * 12;
+        //设置主题锁状态
         final int[] count = {0};
-        topics.stream().filter(topic -> topic.getInt("free") == Constant.TOPIC_UNFREE && buyMonths > 0)
-                .forEach(topic -> {
-                    count[0]++;
-                    //主题时间
-                    Date topicDate = topic.getDate("topic_date");
-                    DateTime dateTime = new DateTime(topicDate);
-                    int topicMillis = dateTime.getYear() + dateTime.getMonthOfYear();
-                    int nowMillis = DateTime.now().getYear() + DateTime.now().getMonthOfYear();
-
-                    //是否在当前时间之前开区间
-                    if (topicMillis <= nowMillis && buyMonths >= count[0]) {
-                        topic.setLock(Constant.TOPIC_UNLOCKED);
-                    }
-                });
-
-        topics.stream().filter(topic -> topic.getInt("free") != Constant.TOPIC_UNFREE).forEach(topic -> topic.setLock(Constant.TOPIC_UNLOCKED));
-
- /*       for (Topic topic : topics) {
+        topics.forEach(topic -> {
             int free = topic.getInt("free");
-            //收费
-            if (free == Constant.TOPIC_UNFREE && buyMonths > 0) {
+
+            //免费
+            if (free == Constant.TOPIC_FREE) {
+                topic.setLock(Constant.UNLOCKED);
+            } else {
+                //收费主题
                 count[0]++;
+
                 //主题时间
                 Date topicDate = topic.getDate("topic_date");
                 DateTime dateTime = new DateTime(topicDate);
@@ -69,14 +49,12 @@ public class TopicService {
                 int nowMillis = DateTime.now().getYear() + DateTime.now().getMonthOfYear();
 
                 //是否在当前时间之前开区间
-                if (topicMillis <= nowMillis && buyMonths >= count[0]) {
-                    topic.setLock(Constant.TOPIC_UNLOCKED);
+                if (topicMillis <= nowMillis && count[0] <= buyMonths) {
+                    topic.setLock(Constant.UNLOCKED);
                 }
-            } else {
-                // 未锁
-                topic.setLock(Constant.TOPIC_UNLOCKED);
             }
-        }*/
+
+        });
 
         return new HttpResult(HttpCode.SUCCESS, HttpCode.TOPICS_LOAD_SUCCESS_WORD, topics);
     }
