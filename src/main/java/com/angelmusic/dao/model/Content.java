@@ -19,7 +19,7 @@ public class Content extends Model<Content> {
     /**
      * 是否锁住
      */
-    private int lock = Constant.LOCKED;
+    public int lock = Constant.LOCKED;
 
     public int getLock() {
         return lock;
@@ -31,13 +31,23 @@ public class Content extends Model<Content> {
     }
 
     /**
+     * 获取上一个content
+     *
+     * @return
+     */
+    public Content getPrevContent(int topicId, int contentId) {
+
+        return findFirst(PlusSqlKit.sql("content.prevContent"), contentId, topicId);
+    }
+
+
+    /**
      * @param topicId 主题
      * @return
      */
     public List<Content> getTopicContentList(String topicId) {
         return ME.find(PlusSqlKit.sql("content.getTopicContentList"), topicId);
     }
-
 
 
 }

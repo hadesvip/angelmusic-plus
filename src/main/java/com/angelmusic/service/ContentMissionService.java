@@ -26,13 +26,16 @@ public class ContentMissionService {
      */
     @Before(Tx.class)
     public HttpResult updateContentMission(String userPhone, int topicContentId, int gameMission, int courseMission) {
+
+        //TODO 先查询是否存在记录
+
         boolean updateResult = ContentMission.ME.updateContentMission(userPhone, topicContentId, gameMission, courseMission);
 
         //更新成功
         if (updateResult) {
             return new HttpResult(HttpCode.SUCCESS, HttpCode.MISSION_UPDATE_SUCCESS_WORD);
         }
-        
+
         return new HttpResult(HttpCode.FAIL, HttpCode.MISSION_UPDATE_FAIL_WORD);
     }
 }

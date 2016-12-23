@@ -23,11 +23,11 @@ public class OrderService {
     /**
      * 获取用户的订单信息
      *
-     * @param userId 用户编号
+     * @param userPhone 用户手机号
      * @return
      */
-    public List<OrderRecord> getUserOrderList(String userId) {
-        return OrderRecord.ME.getUserOrderList(userId);
+    public List<OrderRecord> getUserOrderList(String userPhone) {
+        return OrderRecord.ME.getUserOrderList(userPhone);
     }
 
 

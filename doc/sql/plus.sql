@@ -47,7 +47,7 @@ create table am_topic(
   name varchar(32) not null comment '主题名',
   topic_desc varchar(64) comment '主题描述',
   topic_date date not null comment '主题时间',
-  free int not null default 1 comment '是否免费:1收费,2免费',
+  free int not null default 1 comment '是否免费:1收费,2免费3试看',
   key topic_month_index(topic_date)
 )engine = innodb default charset =utf8 comment '主题表';
 

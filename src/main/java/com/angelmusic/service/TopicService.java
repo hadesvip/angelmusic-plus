@@ -36,7 +36,7 @@ public class TopicService {
             int free = topic.getInt("free");
 
             //免费
-            if (free == Constant.TOPIC_FREE) {
+            if (free == Constant.FREE || free == Constant.PARTS_FREE) {
                 topic.setLock(Constant.UNLOCKED);
             } else {
                 //收费主题

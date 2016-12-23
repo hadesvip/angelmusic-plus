@@ -53,8 +53,17 @@ public class Topic extends Model<Topic> {
      * @param topicId 主题编号
      * @return
      */
-    public Topic getTopic(int topicId) {
+    public Topic getTopic(String topicId) {
         return ME.findById(topicId);
+    }
+
+    /**
+     * 获取试看和收费的主题列表
+     *
+     * @return
+     */
+    public List<Topic> getTopicList() {
+        return find(PlusSqlKit.sql("topic.getToppicList"));
     }
 
 }

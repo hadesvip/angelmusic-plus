@@ -24,11 +24,14 @@ public interface Constant {
     //订单类型:大礼包
     int ORDER_TYPE_GIFT_PACK = 2;
 
-    //主题收费
-    int TOPIC_UNFREE = 1;
+    //收费
+    int UNFREE = 1;
 
-    //主题免费
-    int TOPIC_FREE = 2;
+    //免费
+    int FREE = 2;
+
+    //试看
+    int PARTS_FREE = 3;
 
     //支付成功
     int PAY_SUCESS = 1;

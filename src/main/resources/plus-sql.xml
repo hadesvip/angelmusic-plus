@@ -28,6 +28,7 @@
         <sql id="allTopic">select topic_id,name,topic_desc,topic_date,free from am_topic order by topic_date</sql>
         <sql id="getNotFreeTopicCount">select count(1) from am_topic where free=1</sql>
         <sql id="getTopic">select * from am_topic where topic_id=?</sql>
+        <sql id="getToppicList">select * from am_topic where free =3 or free =1 order by topic_date</sql>
     </sqlGroup>
 
     <!--获取用户订购成功的最新的订单记录-->
@@ -46,14 +47,22 @@
 
     <!--内容-->
     <sqlGroup name="content">
-        <sql id="getTopicContentList">select * from am_topic_content tc left join am_content c on tc.content_id =c.content_id where tc.topic_id =1 order by `order`
+        <sql id="getTopicContentList">select * from am_topic_content tc left join am_content c on tc.content_id
+            =c.content_id where tc.topic_id =? order by `order`
+        </sql>
+        <sql id="prevContent">
+            <![CDATA[
+                select * from am_content c left join am_topic_content tc  on c.content_id = tc.content_id  where c.content_id < ? and  topic_id=?  order by tc.`order` desc limit 1
+             ]]>
         </sql>
     </sqlGroup>
 
     <!--内容关卡-->
     <sqlGroup name="contentMission">
         <sql id="getContentMission">select * from am_content_mission where userPhone=? and topic_content_id=?</sql>
-        <sql id="updateContentMission">update am_content_mission set game_mission=?,course_mission=? where user_phone=? and topic_content_id=?</sql>
+        <sql id="updateContentMission">update am_content_mission set game_mission=?,course_mission=? where user_phone=?
+            and topic_content_id=?
+        </sql>
     </sqlGroup>
 
     <!--主题内容-->

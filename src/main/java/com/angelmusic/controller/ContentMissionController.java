@@ -50,4 +50,22 @@ public class ContentMissionController extends BaseController {
         LOGGER.info("[leave updateContentMission]");
     }
 
+
+    /**
+     * 更新游戏关卡
+     */
+    public void updateGameMission() {
+
+
+    }
+
+
+    /**
+     * 更新课程关卡
+     */
+    public void updateCourseMission() {
+
+
+    }
+
 }
