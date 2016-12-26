@@ -22,6 +22,13 @@ public class UserController extends BaseController {
      */
     public void uploadUserInfo() {
         LOGGER.info("[invoke uploadUserInfo]");
+
+        String method = getRequest().getMethod();
+        if (method.equalsIgnoreCase("get")) {
+            error("此接口只支持post请求");
+            return;
+        }
+
         String userPhone = getPara("userPhone");
 
         //手机号为空
@@ -31,8 +38,26 @@ public class UserController extends BaseController {
         }
 
         //保存用户信息
-        renderJson(UserService.USERSERVICE.uploadUserInfo(userPhone));
+        renderJson(UserService.ME.uploadUserInfo(userPhone));
 
         LOGGER.info("[leave uploadUserInfo]");
+    }
+
+    /**
+     * 获取用户信息
+     */
+    public void getUser() {
+        LOGGER.info("[invoke getUser]");
+
+        String userPhone = getPara("userPhone");
+
+        //手机号为空
+        if (StrKit.isBlank(userPhone)) {
+            error(HttpCode.USER_PHONE_EMPTY, HttpCode.USER_PHONE_EMPTY_WORD);
+            return;
+        }
+        renderJson(UserService.ME.getUser(userPhone));
+
+        LOGGER.info("[leave getUser]");
     }
 }

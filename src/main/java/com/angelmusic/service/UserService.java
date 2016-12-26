@@ -12,7 +12,7 @@ import com.jfinal.plugin.activerecord.tx.Tx;
  */
 public class UserService {
 
-    public static final UserService USERSERVICE = new UserService();
+    public static final UserService ME = new UserService();
 
     /**
      * 上传用户信息
@@ -36,5 +36,16 @@ public class UserService {
         //失败
         return new HttpResult(HttpCode.FAIL, HttpCode.UPLOAD_USERINFO_FAIL_WORD);
 
+    }
+
+    /**
+     * 获取用户信息
+     *
+     * @param userPhone 用户手机号
+     * @return
+     */
+    public HttpResult getUser(String userPhone) {
+        final User user = User.ME.getUserByPhone(userPhone);
+        return new HttpResult(HttpCode.SUCCESS, HttpCode.SUCCESS_WORD, user);
     }
 }

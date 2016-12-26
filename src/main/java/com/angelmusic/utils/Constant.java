@@ -50,4 +50,10 @@ public interface Constant {
 
     //关卡未完成
     int MISSION_UNCOMPLETE = 1;
+
+    //游戏任务
+    int MISSION_GAME = 1;
+
+    //课程任务
+    int MISSION_COURSE = 2;
 }

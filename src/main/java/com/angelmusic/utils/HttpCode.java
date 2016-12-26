@@ -74,10 +74,6 @@ public interface HttpCode {
     //主题加载成功
     String TOPICS_LOAD_SUCCESS_WORD = "主题加载成功";
 
-    //用户编号为空
-    String USERID_EMPTY = "201223";
-    String USERID_EMPTY_WORD = "用户编号为空";
-
     //订单生成成功
     String ORDER_RECORD_SAVE_SUCESS_WORD = "订单生成成功";
 

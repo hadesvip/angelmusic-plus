@@ -20,7 +20,7 @@
 
     <!--用户信息-->
     <sqlGroup name="user">
-        <sql id="getUserByPhone">select user_id,user_name,user_phone,create_date,total_recharge from am_user</sql>
+        <sql id="getUserByPhone">select user_id,user_name,user_phone,create_date from am_user</sql>
     </sqlGroup>
 
     <!--主题信息-->

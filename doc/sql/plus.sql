@@ -25,7 +25,6 @@ create table am_user (
   user_id int not null primary key AUTO_INCREMENT comment '用户编号',
   user_name varchar(16) comment '用户名',
   user_phone VARCHAR(11) not null comment '用户手机号码',
-  total_recharge int comment '累计消费金额',
   create_date DATETIME comment '用户创建时间',
   unique key uq_user_phone_index (user_phone)
 )engine = innodb default charset =utf8 comment '用户信息表';

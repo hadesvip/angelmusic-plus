@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  * 主题
  * Created by wangyong on 16-12-20.
  */
-@ControllerBind(controllerKey = "/weapi/topic")
+@ControllerBind(controllerKey = "/webapi/topic")
 public class TopicContoller extends BaseController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(TopicContoller.class);
@@ -23,16 +23,16 @@ public class TopicContoller extends BaseController {
     public void loadTopicList() {
         LOGGER.info("[invoke loadTopicList]");
 
-        String userId = getPara("userId");
+        String userPhone = getPara("userPhone");
 
         //用户编号为空
-        if (StrKit.isBlank(userId)) {
-            error(HttpCode.USERID_EMPTY, HttpCode.USERID_EMPTY_WORD);
+        if (StrKit.isBlank(userPhone)) {
+            error(HttpCode.USER_PHONE_EMPTY, HttpCode.USER_PHONE_EMPTY_WORD);
             return;
         }
 
         //加载用户主题
-        renderJson(TopicService.TOPICSERVICE.loadTopicList(userId));
+        renderJson(TopicService.TOPICSERVICE.loadTopicList(userPhone));
 
         LOGGER.info("[leave loadTopicList]");
     }

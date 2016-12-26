@@ -25,11 +25,11 @@ public class ContentMissionController extends BaseController {
     public void updateContentMission() {
         LOGGER.info("[invoke updateContentMission]");
 
-        //用户手机号，主题内容编号，游戏关卡，课程关卡
+        //用户手机号，主题内容编号，类型
         String userPhone = getPara("userPhone");
         int topicContentId = getParaToInt("topicContentId");
-        int gameMission = getParaToInt("gameMission");
-        int courseMission = getParaToInt("courseMission");
+        int type = getParaToInt("type");
+        int missionStatus = getParaToInt("missionStatus");
 
         //参数校验
         if (StrKit.isBlank(userPhone)) {
@@ -38,34 +38,15 @@ public class ContentMissionController extends BaseController {
         }
 
         //关卡状态校验
-        if ((gameMission < Constant.MISSION_UNCOMPLETE || gameMission < Constant.MISSION_COMPLETE)
-                && (courseMission < Constant.MISSION_UNCOMPLETE || courseMission < Constant.MISSION_COMPLETE)) {
+        if ((missionStatus < Constant.MISSION_UNCOMPLETE || missionStatus < Constant.MISSION_COMPLETE)) {
             error(HttpCode.PARAMS_INVAILD, HttpCode.MISSION_STATUS_OVER_WORD);
             return;
         }
 
         //更新用户关卡
-        renderJson(ContentMissionService.ME.updateContentMission(userPhone, topicContentId, gameMission, courseMission));
+        renderJson(ContentMissionService.ME.updateContentMission(userPhone, topicContentId, type, missionStatus));
 
         LOGGER.info("[leave updateContentMission]");
-    }
-
-
-    /**
-     * 更新游戏关卡
-     */
-    public void updateGameMission() {
-
-
-    }
-
-
-    /**
-     * 更新课程关卡
-     */
-    public void updateCourseMission() {
-
-
     }
 
 }

@@ -43,7 +43,6 @@ public class User extends Model<User> {
                 ME
                         .set("user_name", "")
                         .set("user_phone", userPhone)
-                        .set("total_recharge", 0)
                         .set("create_date", new Date())
                         .save();
     }

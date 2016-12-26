@@ -2,7 +2,6 @@ package com.angelmusic.dao.model;
 
 import com.angelmusic.plugin.sql.PlusSqlKit;
 import com.jfinal.ext.plugin.tablebind.TableBind;
-import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 
 /**
@@ -26,16 +25,22 @@ public class ContentMission extends Model<ContentMission> {
         return ME.findFirst(PlusSqlKit.sql("contentMission.getContentMission"), userPhone, topicContentId);
     }
 
+
     /**
-     * 更新关卡
+     * 保存内容关卡
      *
-     * @param userPhone      用户手机号
-     * @param topicContentId 主题内容
-     * @param gameMission    游戏
-     * @param courseMission  课程
-     * @return
+     * @param userPhone      手机号
+     * @param topicContentId 主题内容编号
+     * @param gameMission    游戏关卡
+     * @param courseMission  课程关卡
      */
-    public boolean updateContentMission(String userPhone, int topicContentId, int gameMission, int courseMission) {
-        return Db.update(PlusSqlKit.sql("contentMission.updateContentMission"), gameMission, courseMission, userPhone, topicContentId) > 0;
+    public boolean saveContentMission(String userPhone, int topicContentId, int gameMission, int courseMission) {
+        return
+                ME
+                        .set("user_phone", userPhone)
+                        .set("topic_content_id", topicContentId)
+                        .set("game_mission", gameMission)
+                        .set("course_mission", courseMission)
+                        .save();
     }
 }
