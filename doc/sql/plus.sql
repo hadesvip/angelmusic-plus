@@ -46,7 +46,7 @@ create table am_topic(
   name varchar(32) not null comment '主题名',
   topic_desc varchar(64) comment '主题描述',
   topic_date date not null comment '主题时间',
-  free int not null default 1 comment '是否免费:1收费,2免费3试看',
+  free int not null default 1 comment '是否免费:1收费2免费3试看',
   key topic_month_index(topic_date)
 )engine = innodb default charset =utf8 comment '主题表';
 
@@ -60,7 +60,7 @@ create table am_gift_pack(
 create table am_order_record(
   order_id varchar(64) not null PRIMARY KEY  comment '订单号',
   user_phone varchar(11) not null comment '用户手机号',
-  money decimal(2) not null comment '本次充值金额',
+  money decimal(5,2) not null comment '本次充值金额',
   order_date datetime not null default now() comment '消费时间',
   `type` int not null comment  '支付类型:激活码1，大礼包2',
   product int not null comment '激活码或者大礼包编号',

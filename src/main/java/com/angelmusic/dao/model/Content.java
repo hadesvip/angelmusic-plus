@@ -6,6 +6,7 @@ import com.jfinal.ext.plugin.tablebind.TableBind;
 import com.jfinal.plugin.activerecord.Model;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 内容
@@ -25,9 +26,17 @@ public class Content extends Model<Content> {
         return lock;
     }
 
-    public Content setLock(int lock) {
+    public int setLock(int lock) {
         this.lock = lock;
-        return this;
+        return this.lock;
+    }
+
+    @Override
+    protected Map<String, Object> getAttrs() {
+        Map<String, Object> attrs = super.getAttrs();
+        attrs.put("lock", lock);
+
+        return attrs;
     }
 
     /**

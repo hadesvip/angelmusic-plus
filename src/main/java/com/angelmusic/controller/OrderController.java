@@ -1,5 +1,6 @@
 package com.angelmusic.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.angelmusic.base.BaseController;
 import com.angelmusic.service.OrderService;
 import com.angelmusic.service.RechargeRecordService;
@@ -24,12 +25,11 @@ public class OrderController extends BaseController {
      */
     public void createOrderRecord() {
         LOGGER.info("[invoke createOrderRecord]");
-
-        String method = getRequest().getMethod();
+       /* String method = getRequest().getMethod();
         if (method.equalsIgnoreCase("get")) {
             error("此接口只支持post请求");
             return;
-        }
+        }*/
 
         String userPhone = getPara("userPhone");
         String money = getPara("money");
@@ -47,16 +47,19 @@ public class OrderController extends BaseController {
 
         //金额
         if (Integer.parseInt(money) <= 0) {
-            error(HttpCode.PARAMS_INVAILD, HttpCode.ORDER_RECORD_MONEY_LESS_ZERO_WORD);
+            error(HttpCode.ORDER_RECORD_MONEY_LESS_ZERO, HttpCode.ORDER_RECORD_MONEY_LESS_ZERO_WORD);
             return;
         }
 
         //支付类型
         if (type < Constant.ORDER_TYPE_ACTIVATECODE || type > Constant.ORDER_TYPE_GIFT_PACK) {
-            error(HttpCode.PARAMS_INVAILD, HttpCode.ORDER_TYPE_OVER_WORD);
+            error(HttpCode.ORDER_TYPE_OVER, HttpCode.ORDER_TYPE_OVER_WORD);
             return;
         }
 
+        String jsonstr = JSON.toJSONString(OrderService.ORDERSERVICE.createOrderRecord(userPhone, money, product, type));
+
+        System.out.println(jsonstr);
         //创建订单
         renderJson(OrderService.ORDERSERVICE.createOrderRecord(userPhone, money, product, type));
 
@@ -79,6 +82,12 @@ public class OrderController extends BaseController {
         //String userId = getPara("userId");
         String orderId = getPara("orderId");
         String payResult = getPara("payResult");
+
+        //参数异常
+        if (StrKit.isBlank(orderId) || StrKit.isBlank(payResult)) {
+            error(HttpCode.PARAMS_INVAILD, HttpCode.PARAM_ORDERID_PAYRESULT_EMPTY_WORD);
+            return;
+        }
 
         //更新订单
         renderJson(OrderService.ORDERSERVICE.updateOrderRecord(orderId, payResult));

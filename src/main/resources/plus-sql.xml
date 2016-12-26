@@ -36,7 +36,7 @@
         <sql id="getOrderCountByUserId">select count(1) from am_order_record order by order_date desc where userPhone=?
             and payresult=1
         </sql>
-        <sql id="getOrderList">select * from am_order_record where pay_result =1 and userPhone=?</sql>
+        <sql id="getOrderList">select * from am_order_record where pay_result =1 and user_phone=?</sql>
         <sql id="updateOrderRecord">update am_order_record set pay_result =? where userPhone=?</sql>
     </sqlGroup>
 

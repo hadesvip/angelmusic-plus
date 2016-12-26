@@ -52,7 +52,7 @@ public class OrderRecord extends Model<OrderRecord> {
         return
                 ME
                         .set("order_id", orderId)
-                        .set("userPhone", userPhone)
+                        .set("user_phone", userPhone)
                         .set("money", money)
                         .set("product", product)
                         .set("order_date", new Date())

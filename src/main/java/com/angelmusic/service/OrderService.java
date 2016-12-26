@@ -1,5 +1,6 @@
 package com.angelmusic.service;
 
+import com.alibaba.fastjson.JSON;
 import com.angelmusic.dao.model.ActivationCode;
 import com.angelmusic.dao.model.GiftPack;
 import com.angelmusic.dao.model.OrderRecord;
@@ -19,17 +20,6 @@ import java.util.UUID;
 public class OrderService {
 
     public static final OrderService ORDERSERVICE = new OrderService();
-
-    /**
-     * 获取用户的订单信息
-     *
-     * @param userPhone 用户手机号
-     * @return
-     */
-    public List<OrderRecord> getUserOrderList(String userPhone) {
-        return OrderRecord.ME.getUserOrderList(userPhone);
-    }
-
 
     /**
      * 创建订单记录
@@ -68,7 +58,7 @@ public class OrderService {
             return new HttpResult(HttpCode.SUCCESS, HttpCode.ORDER_UPDATE_SCUCESS_WORD);
         }
 
-        return new HttpResult(HttpCode.ORDER_RECORD_CREATE_FAIL, HttpCode.ORDER_RECORD_CREATE_FAIL_WORD);
+        return new HttpResult(HttpCode.ORDER_UPDATE_FAIL, HttpCode.ORDER_UPDATE_FAIL_WORD);
     }
 
     /**

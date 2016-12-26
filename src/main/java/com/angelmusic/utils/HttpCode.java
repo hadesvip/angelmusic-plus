@@ -86,9 +86,11 @@ public interface HttpCode {
     String CREATEORDERRECORD_PARAMS_INVAILD = "用户编号,消费金额，产品，支付类型不可以为空";
 
     //订单金额不可以小于0
-    String ORDER_RECORD_MONEY_LESS_ZERO_WORD = "201225";
+    String ORDER_RECORD_MONEY_LESS_ZERO = "201228";
+    String ORDER_RECORD_MONEY_LESS_ZERO_WORD = "订单金额不可以小于0";
 
     //订单类型只能是激活码和大礼包
+    String ORDER_TYPE_OVER = "201229";
     String ORDER_TYPE_OVER_WORD = "订单类型只能是激活码和大礼包";
 
     //订单更新成功
@@ -116,5 +118,7 @@ public interface HttpCode {
 
     //关卡更新失败
     String MISSION_UPDATE_FAIL_WORD = "关卡更新失败";
+
+    String PARAM_ORDERID_PAYRESULT_EMPTY_WORD = "订单号和支付结果不可以为空";
 
 }

@@ -7,6 +7,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 主题
@@ -24,9 +25,17 @@ public class Topic extends Model<Topic> {
         return lock;
     }
 
-    public Topic setLock(int lock) {
+    public int setLock(int lock) {
         this.lock = lock;
-        return this;
+        return this.lock;
+    }
+
+    @Override
+    protected Map<String, Object> getAttrs() {
+        Map<String, Object> attrs = super.getAttrs();
+        attrs.put("lock", lock);
+
+        return attrs;
     }
 
     /**
@@ -65,5 +74,6 @@ public class Topic extends Model<Topic> {
     public List<Topic> getTopicList() {
         return find(PlusSqlKit.sql("topic.getToppicList"));
     }
+
 
 }

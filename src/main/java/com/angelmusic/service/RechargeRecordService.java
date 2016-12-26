@@ -1,6 +1,8 @@
 package com.angelmusic.service;
 
 import com.angelmusic.dao.model.RechargeRecord;
+import com.angelmusic.utils.HttpCode;
+import com.angelmusic.utils.HttpResult;
 import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.tx.Tx;
 
@@ -24,12 +26,13 @@ public class RechargeRecordService {
      * @param payType      支付类型
      */
     @Before(Tx.class)
-    public void saveRechargeRecord(String linkId, String chargeStatus, String chargeMsg, long price, String cpParam, String payType) {
+    public HttpResult saveRechargeRecord(String linkId, String chargeStatus, String chargeMsg, long price, String cpParam, String payType) {
         //保存充值流水
         if (RechargeRecord.ME.saveRechargeRecord(linkId, chargeStatus, chargeMsg, price / 10, cpParam, payType)) {
 
             //暂时不需要修改订单状态，由安卓客户端控制
             //OrderRecord.ME.updatePayResult(cpParam, chargeStatus);
         }
+        return new HttpResult(HttpCode.SUCCESS, HttpCode.SUCCESS_WORD, null);
     }
 }
