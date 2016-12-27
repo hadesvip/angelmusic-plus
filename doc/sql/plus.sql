@@ -61,7 +61,7 @@ create table am_order_record(
   order_id varchar(64) not null PRIMARY KEY  comment '订单号',
   user_phone varchar(11) not null comment '用户手机号',
   money decimal(5,2) not null comment '本次充值金额',
-  order_date datetime not null default now() comment '消费时间',
+  order_date TIMESTAMP not null default now() comment '消费时间',
   `type` int not null comment  '支付类型:激活码1，大礼包2',
   product int not null comment '激活码或者大礼包编号',
   pay_result int not null comment '支付结果1成功2失败3支付中',

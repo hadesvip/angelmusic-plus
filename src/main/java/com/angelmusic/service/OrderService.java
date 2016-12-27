@@ -1,6 +1,5 @@
 package com.angelmusic.service;
 
-import com.alibaba.fastjson.JSON;
 import com.angelmusic.dao.model.ActivationCode;
 import com.angelmusic.dao.model.GiftPack;
 import com.angelmusic.dao.model.OrderRecord;
@@ -10,7 +9,6 @@ import com.angelmusic.utils.HttpResult;
 import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.tx.Tx;
 
-import java.util.List;
 import java.util.UUID;
 
 /**

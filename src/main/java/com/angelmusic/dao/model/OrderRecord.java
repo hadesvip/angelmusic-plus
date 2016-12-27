@@ -6,6 +6,7 @@ import com.jfinal.ext.plugin.tablebind.TableBind;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 

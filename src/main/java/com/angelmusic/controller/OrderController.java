@@ -57,9 +57,6 @@ public class OrderController extends BaseController {
             return;
         }
 
-        String jsonstr = JSON.toJSONString(OrderService.ORDERSERVICE.createOrderRecord(userPhone, money, product, type));
-
-        System.out.println(jsonstr);
         //创建订单
         renderJson(OrderService.ORDERSERVICE.createOrderRecord(userPhone, money, product, type));
 
