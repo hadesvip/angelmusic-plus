@@ -16,7 +16,7 @@ create table am_qrcode_client(
 create table am_activation_code(
   id int primary key not null auto_increment comment '主键',
   code varchar(64) not null comment '激活码',
-  effective_time int not null DEFAULT 12 COMMENT '有效时间:单位月',
+  effective_time int not null DEFAULT 12 COMMENT '时长:单位月',
   status int not null default 1 comment  '激活码状态:1未激活2已激活',
   unique key uq_activation_code_index (code)
 )engine = innodb default charset =utf8 comment '激活码';
@@ -37,16 +37,15 @@ create table am_topic(
   topic_id int primary key not null AUTO_INCREMENT comment '主题编号',
   name varchar(32) not null comment '主题名',
   topic_desc varchar(64) comment '主题描述',
-  topic_date date not null comment '主题时间',
   free int not null default 1 comment '是否免费:1收费2试看',
-  key topic_month_index(topic_date)
+  `order` int not null COMMENT '顺序'
 )engine = innodb default charset =utf8 comment '主题表';
 
 create table am_gift_pack(
   gift_pack_id int not null primary key AUTO_INCREMENT comment '礼包编号',
   gift_pack_name varchar(16) comment '大礼包名称',
   gift_pack_desc varchar(64) comment '大礼包描述',
-  effective_time int not null DEFAULT 12 COMMENT '有效时间:单位月'
+  effective_time int not null DEFAULT 12 COMMENT '时长:单位月'
 )engine =innodb default charset =utf8 comment '大礼包';
 
 create table am_order_record(
