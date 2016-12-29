@@ -1,7 +1,7 @@
 create database am_plus;
 use am_plus;
 create table am_qrcode(
-  qrcode_id int primary key not null auto_increment comment '二维码编号',
+  qrcode_id int primary key not null auto_increment comment '主键',
   qrcode_no varchar(64) not null comment '二维码编号',
   UNIQUE key uq_qrcode_qrcode_no_index(qrcode_no)
 )engine = innodb default charset =utf8 comment '二维码信息表';
