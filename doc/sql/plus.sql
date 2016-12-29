@@ -45,6 +45,7 @@ create table am_gift_pack(
   gift_pack_id int not null primary key AUTO_INCREMENT comment '礼包编号',
   gift_pack_name varchar(16) comment '大礼包名称',
   gift_pack_desc varchar(64) comment '大礼包描述',
+  price decimal(5,2) not null comment '大礼包金额',
   effective_time int not null DEFAULT 12 COMMENT '时长:单位月'
 )engine =innodb default charset =utf8 comment '大礼包';
 
@@ -63,10 +64,16 @@ create table am_content(
   content_id int not null primary key AUTO_INCREMENT comment '内容编号',
   name varchar(12) not null comment '内容名称',
   content_desc varchar(64)  comment '内容描述',
-  UNIQUE key uq_content_name_index(name)
+  topic_id int not null comment '主题编号',
+  course_name varchar(12)  comment '课程名称',
+  course_video_path varchar(64) comment '视频',
+  game_name  varchar(64) comment '游戏名',
+  free int not null default 1 comment '是否免费:1收费,2免费',
+  `order` int not null comment '顺序',
+  UNIQUE key uq_content_name_topic_index(name,topic_id)
 )engine =innodb default charset =utf8 comment '主题内容';
 
-create table am_topic_content(
+/*create table am_topic_content(
   topic_content_id int not null PRIMARY KEY AUTO_INCREMENT COMMENT '主键编号',
   topic_id int not null comment '主题编号',
   content_id int not null comment '内容编号',
@@ -76,11 +83,11 @@ create table am_topic_content(
   free int not null default 1 comment '是否免费:1收费,2免费',
   `order` int not null comment '顺序',
   unique key uq_topic_content_index (topic_id,content_id)
-)engine =innodb default charset =utf8 comment '主题内容关系';
+)engine =innodb default charset =utf8 comment '主题内容关系';*/
 
 create table am_content_mission(
   content_mission_id int not null primary key AUTO_INCREMENT comment '主键编号',
   user_phone varchar(11) not null comment '用户手机号',
-  topic_content_id int not null comment '主题内容关系编号',
+  content_id int not null comment '内容编号',
   game_mission int not null default 1 comment '1未完成2完成'
 )engine = innodb default charset = utf8 comment '内容关卡表';
