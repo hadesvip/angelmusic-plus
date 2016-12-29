@@ -21,14 +21,6 @@ create table am_activation_code(
   unique key uq_activation_code_index (code)
 )engine = innodb default charset =utf8 comment '激活码';
 
-create table am_user (
-  user_id int not null primary key AUTO_INCREMENT comment '用户编号',
-  user_name varchar(16) comment '用户名',
-  user_phone VARCHAR(11) not null comment '用户手机号码',
-  create_date DATETIME comment '用户创建时间',
-  unique key uq_user_phone_index (user_phone)
-)engine = innodb default charset =utf8 comment '用户信息表';
-
 create table am_recharge_record(
   link_id varchar(64) not null primary key comment '统接订单编号',
   order_id VARCHAR(64) not null comment '订单编号',
@@ -46,7 +38,7 @@ create table am_topic(
   name varchar(32) not null comment '主题名',
   topic_desc varchar(64) comment '主题描述',
   topic_date date not null comment '主题时间',
-  free int not null default 1 comment '是否免费:1收费2免费3试看',
+  free int not null default 1 comment '是否免费:1收费2试看',
   key topic_month_index(topic_date)
 )engine = innodb default charset =utf8 comment '主题表';
 
@@ -81,7 +73,7 @@ create table am_topic_content(
   content_id int not null comment '内容编号',
   course_name varchar(12)  comment '课程名称',
   course_video_path varchar(64) comment '视频',
-  game_path  varchar(64) comment '游戏',
+  game_name  varchar(64) comment '游戏名',
   free int not null default 1 comment '是否免费:1收费,2免费',
   `order` int not null comment '顺序',
   unique key uq_topic_content_index (topic_id,content_id)
@@ -91,6 +83,5 @@ create table am_content_mission(
   content_mission_id int not null primary key AUTO_INCREMENT comment '主键编号',
   user_phone varchar(11) not null comment '用户手机号',
   topic_content_id int not null comment '主题内容关系编号',
-  game_mission int not null default 1 comment '1未完成2完成',
-  course_mission int not null default 1 comment '1未完成2完成'
+  game_mission int not null default 1 comment '1未完成2完成'
 )engine = innodb default charset = utf8 comment '内容关卡表';

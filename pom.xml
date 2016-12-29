@@ -130,6 +130,12 @@
             <version>${fastjson.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>kisso</artifactId>
+            <version>3.6.13</version>
+        </dependency>
+
     </dependencies>
     <build>
         <finalName>angelmusic-plus</finalName>
