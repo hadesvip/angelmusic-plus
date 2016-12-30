@@ -27,7 +27,7 @@ public class OrderController extends BaseController {
         LOGGER.info("[invoke createOrderRecord]");
         String method = getRequest().getMethod();
         if (method.equalsIgnoreCase("get")) {
-            renderJson(Ret.create("code", HttpCode.HTTP_ONLY_SUPPORT_POST));
+            renderJson(Ret.create("code", HttpCode.HTTP_ONLY_SUPPORT_POST).getData());
             return;
         }
 
@@ -47,18 +47,18 @@ public class OrderController extends BaseController {
 
         //金额
         if (Integer.parseInt(money) <= 0) {
-            Ret.create("code", HttpCode.ORDER_RECORD_MONEY_LESS_ZERO);
+            renderJson(Ret.create("code", HttpCode.ORDER_RECORD_MONEY_LESS_ZERO).getData());
             return;
         }
 
         //支付类型
         if (type < Constant.ORDER_TYPE_ACTIVATECODE || type > Constant.ORDER_TYPE_GIFT_PACK) {
-            Ret.create("code", HttpCode.ORDER_TYPE_OVER);
+            renderJson(Ret.create("code", HttpCode.ORDER_TYPE_OVER).getData());
             return;
         }
 
         //创建订单
-        renderJson(OrderService.ME.createOrderRecord(userPhone, money, product, type));
+        renderJson(OrderService.ME.createOrderRecord(userPhone, money, product, type).getData());
 
         LOGGER.info("[leave createOrderRecord]");
     }
@@ -72,7 +72,7 @@ public class OrderController extends BaseController {
 
         String method = getRequest().getMethod();
         if (method.equalsIgnoreCase("get")) {
-            renderJson(Ret.create("code", HttpCode.HTTP_ONLY_SUPPORT_POST));
+            renderJson(Ret.create("code", HttpCode.HTTP_ONLY_SUPPORT_POST).getData());
             return;
         }
 
@@ -81,12 +81,12 @@ public class OrderController extends BaseController {
 
         //参数异常
         if (StrKit.isBlank(orderId) || StrKit.isBlank(payResult)) {
-            renderJson(Ret.create("code", HttpCode.PARAMS_INVAILD));
+            renderJson(Ret.create("code", HttpCode.PARAMS_INVAILD).getData());
             return;
         }
 
         //更新订单
-        renderJson(OrderService.ME.updateOrderRecord(orderId, payResult));
+        renderJson(OrderService.ME.updateOrderRecord(orderId, payResult).getData());
 
         LOGGER.info("[leave updateOrderPayResult]");
     }
