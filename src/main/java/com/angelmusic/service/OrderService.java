@@ -1,14 +1,14 @@
 package com.angelmusic.service;
 
-import com.angelmusic.dao.model.ActivationCode;
-import com.angelmusic.dao.model.GiftPack;
-import com.angelmusic.dao.model.OrderRecord;
+import com.angelmusic.dao.model.*;
 import com.angelmusic.utils.Constant;
 import com.angelmusic.utils.HttpCode;
 import com.jfinal.aop.Before;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.tx.Tx;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -22,20 +22,20 @@ public class OrderService {
     /**
      * 创建订单记录
      *
-     * @param userPhone 用户手机号
-     * @param money     消费金额
-     * @param product   产品
-     * @param type      支付类型
+     * @param account 用户账号
+     * @param money   消费金额
+     * @param product 产品
+     * @param type    支付类型
      * @return
      */
     @Before(Tx.class)
-    public Ret createOrderRecord(String userPhone, String money, String product, int type) {
+    public Ret createOrderRecord(String account, String money, String product, int type) {
 
         //订单号
         String orderId = UUID.randomUUID().toString().replaceAll("-", "");
 
         //成功订单成功
-        if (OrderRecord.ME.saveOrderRecord(orderId, userPhone, money, product, type)) {
+        if (OrderRecord.ME.saveOrderRecord(orderId, account, money, product, type)) {
 
             return Ret.create("code", HttpCode.SUCCESS).put("detail", OrderRecord.ME);
         }
@@ -48,15 +48,62 @@ public class OrderService {
      *
      * @param orderId   订单编号
      * @param payResult 支付结果
+     * @param account   账号
      * @return
      */
     @Before(Tx.class)
-    public Ret updateOrderRecord(String orderId, String payResult) {
+    public Ret updateOrderRecord(String orderId, String payResult, String account) {
 
         //更新成功
         if (OrderRecord.ME.updatePayResult(orderId, payResult)) {
+
+            List<Topic> topicList = new ArrayList<>();
+            final List<Content>[] contentList = new ArrayList[]{null};
+
+
+            //取出用户解锁主题
+            Topic.ME.getTopicList().forEach(topic -> {
+                contentList[0] = new ArrayList<>();
+                //试看
+                if (topic.getInt("topic_free") == Constant.PARTS_FREE) {
+                    //内部内容判断
+                    Content.ME.getTopicContentList(topic.getInt("topic_id")).forEach(content -> {
+                        if (content.getInt("content_free") == Constant.CONTENT_FREE) {
+                            contentList[0].add(content);
+                        } else {
+                            //用户上一个关卡是否通关，并且用户是否购买了该主题
+                            ContentMission contentMission = ContentMission.ME.getContentMission(account, content.getInt("content_id"));
+                            if (contentMission != null) {
+                                int gameMission = contentMission.getInt("game_mission");
+                                if (gameMission == Constant.MISSION_COMPLETE) {
+
+                                }
+                            }
+
+
+                        }
+
+
+                    });
+
+
+                    topicList.add(topic);
+
+
+                }
+
+                //收费
+                if (topic.getInt("free") == Constant.UNFREE) {
+
+                }
+
+
+            });
+
+
             return Ret.create("code", HttpCode.SUCCESS);
         }
+
 
         return Ret.create("code", HttpCode.ORDER_UPDATE_FAIL);
     }

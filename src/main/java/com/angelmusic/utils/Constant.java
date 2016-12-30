@@ -27,11 +27,11 @@ public interface Constant {
     //收费
     int UNFREE = 1;
 
-    //免费
-    int FREE = 2;
-
     //试看
     int PARTS_FREE = 3;
+
+    //内容免费
+    int CONTENT_FREE = 2;
 
     //支付成功
     int PAY_SUCESS = 1;

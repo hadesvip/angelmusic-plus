@@ -54,7 +54,7 @@ public class Content extends Model<Content> {
      * @param topicId 主题
      * @return
      */
-    public List<Content> getTopicContentList(String topicId) {
+    public List<Content> getTopicContentList(int topicId) {
         return ME.find(PlusSqlKit.sql("content.getTopicContentList"), topicId);
     }
 
