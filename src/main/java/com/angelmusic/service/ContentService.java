@@ -3,7 +3,6 @@ package com.angelmusic.service;
 import com.angelmusic.dao.model.Content;
 import com.angelmusic.dao.model.ContentMission;
 import com.angelmusic.dao.model.Topic;
-import com.angelmusic.dao.model.TopicContent;
 import com.angelmusic.utils.Constant;
 import com.angelmusic.utils.HttpCode;
 import com.angelmusic.utils.HttpResult;
@@ -84,6 +83,7 @@ public class ContentService {
      * @return
      */
     public HttpResult getVedioAndGame(int topicId, int contentId) {
-        return new HttpResult(HttpCode.SUCCESS, null, TopicContent.ME.getTopicContent(topicId, contentId));
+        //return new HttpResult(HttpCode.SUCCESS, null, TopicContent.ME.getTopicContent(topicId, contentId));
+        return null;
     }
 }
