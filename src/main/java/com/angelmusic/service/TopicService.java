@@ -28,7 +28,7 @@ public class TopicService {
         List<Topic> topics = Topic.ME.topics();
 
         //计算出用户总共买了几个月
-        final int buyMonths = OrderService.ORDERSERVICE.userMonths(userId);
+        final int buyMonths = OrderService.ME.userMonths(userId);
 
         //设置主题锁状态
         final int[] count = {0};

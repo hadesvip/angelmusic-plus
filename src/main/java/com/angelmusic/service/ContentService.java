@@ -32,7 +32,7 @@ public class ContentService {
         final List<Content> contentList = Content.ME.getTopicContentList(topicId);
 
         //算出用户购买了多少个月
-        final int userMonths = OrderService.ORDERSERVICE.userMonths(userPhone);
+        final int userMonths = OrderService.ME.userMonths(userPhone);
 
         //计算主题是收费主题中第几个月
         final List<Topic> topicList = Topic.ME.getTopicList();
