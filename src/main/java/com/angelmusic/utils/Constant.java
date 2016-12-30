@@ -56,4 +56,5 @@ public interface Constant {
 
     //课程任务
     int MISSION_COURSE = 2;
+
 }

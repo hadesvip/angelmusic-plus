@@ -59,10 +59,8 @@
 
     <!--内容关卡-->
     <sqlGroup name="contentMission">
-        <sql id="getContentMission">select * from am_content_mission where userPhone=? and topic_content_id=?</sql>
-        <sql id="updateContentMission">update am_content_mission set game_mission=?,course_mission=? where user_phone=?
-            and topic_content_id=?
-        </sql>
+        <sql id="getContentMission">select * from am_content_mission where userPhone=? and content_id=?</sql>
+        <sql id="updateContentMission">update am_content_mission set game_mission=? where user_phone=? and content_id=?</sql>
     </sqlGroup>
 
     <!--主题内容-->

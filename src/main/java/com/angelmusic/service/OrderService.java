@@ -5,8 +5,8 @@ import com.angelmusic.dao.model.GiftPack;
 import com.angelmusic.dao.model.OrderRecord;
 import com.angelmusic.utils.Constant;
 import com.angelmusic.utils.HttpCode;
-import com.angelmusic.utils.HttpResult;
 import com.jfinal.aop.Before;
+import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.tx.Tx;
 
 import java.util.UUID;
@@ -17,7 +17,7 @@ import java.util.UUID;
  */
 public class OrderService {
 
-    public static final OrderService ORDERSERVICE = new OrderService();
+    public static final OrderService ME = new OrderService();
 
     /**
      * 创建订单记录
@@ -29,16 +29,18 @@ public class OrderService {
      * @return
      */
     @Before(Tx.class)
-    public HttpResult createOrderRecord(String userPhone, String money, String product, int type) {
+    public Ret createOrderRecord(String userPhone, String money, String product, int type) {
 
         //订单号
-        String orderId = UUID.randomUUID().toString();
+        String orderId = UUID.randomUUID().toString().replaceAll("-", "");
 
         //成功订单成功
         if (OrderRecord.ME.saveOrderRecord(orderId, userPhone, money, product, type)) {
-            return new HttpResult(HttpCode.SUCCESS, HttpCode.ORDER_RECORD_SAVE_SUCESS_WORD, OrderRecord.ME);
+
+            return Ret.create("code", HttpCode.SUCCESS).put("detail", OrderRecord.ME);
         }
-        return new HttpResult(HttpCode.ORDER_RECORD_CREATE_FAIL, HttpCode.ORDER_RECORD_CREATE_FAIL_WORD);
+
+        return Ret.create("code", HttpCode.ORDER_RECORD_CREATE_FAIL).put("detail", OrderRecord.ME);
     }
 
     /**
@@ -49,14 +51,13 @@ public class OrderService {
      * @return
      */
     @Before(Tx.class)
-    public HttpResult updateOrderRecord(String orderId, String payResult) {
+    public Ret updateOrderRecord(String orderId, String payResult) {
 
         //更新成功
         if (OrderRecord.ME.updatePayResult(orderId, payResult)) {
-            return new HttpResult(HttpCode.SUCCESS, HttpCode.ORDER_UPDATE_SCUCESS_WORD);
+            return Ret.create("code", HttpCode.SUCCESS);
         }
-
-        return new HttpResult(HttpCode.ORDER_UPDATE_FAIL, HttpCode.ORDER_UPDATE_FAIL_WORD);
+        return Ret.create("code", HttpCode.ORDER_UPDATE_FAIL);
     }
 
     /**

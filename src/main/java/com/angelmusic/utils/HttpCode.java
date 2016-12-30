@@ -74,12 +74,8 @@ public interface HttpCode {
     //主题加载成功
     String TOPICS_LOAD_SUCCESS_WORD = "主题加载成功";
 
-    //订单生成成功
-    String ORDER_RECORD_SAVE_SUCESS_WORD = "订单生成成功";
-
     //订单生成失败
     String ORDER_RECORD_CREATE_FAIL = "201224";
-    String ORDER_RECORD_CREATE_FAIL_WORD = "订单生成失败";
 
     //参数异常
     String PARAMS_INVAILD = "201225";
@@ -87,38 +83,23 @@ public interface HttpCode {
 
     //订单金额不可以小于0
     String ORDER_RECORD_MONEY_LESS_ZERO = "201228";
-    String ORDER_RECORD_MONEY_LESS_ZERO_WORD = "订单金额不可以小于0";
 
     //订单类型只能是激活码和大礼包
     String ORDER_TYPE_OVER = "201229";
-    String ORDER_TYPE_OVER_WORD = "订单类型只能是激活码和大礼包";
 
-    //订单更新成功
-    String ORDER_UPDATE_SCUCESS_WORD = "订单更新成功";
 
     //订单更新失败
     String ORDER_UPDATE_FAIL = "201226";
-    String ORDER_UPDATE_FAIL_WORD = "订单更新失败";
-
-    //统接密码不正确
-    String TJ_ENCRYPTDATA_ERROR = "201227";
-    String TJ_ENCRYPTDATA_ERROR_WORD = "统接密码不正确";
 
     //主题编号和用户编号不能为空
     String TOPIC_USER_EMPTY_WORD = "主题编号和用户手机号不能为空";
 
-    //用户手机号不可以为空
-    String MOBILE_EMPTY_WORD = "用户手机号不可以为空";
-
-    //关卡状态只有完成和未完成两个状态
-    String MISSION_STATUS_OVER_WORD = "关卡状态只能有完成和未完成两个状态";
 
     //关卡更新成功
     String MISSION_UPDATE_SUCCESS_WORD = "关卡状态更新成功";
 
-    //关卡更新失败
-    String MISSION_UPDATE_FAIL_WORD = "关卡更新失败";
+    //只支持post请求
+    String HTTP_ONLY_SUPPORT_POST = "202";
 
-    String PARAM_ORDERID_PAYRESULT_EMPTY_WORD = "订单号和支付结果不可以为空";
 
 }
