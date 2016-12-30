@@ -79,3 +79,9 @@ create table am_content_mission(
   content_id int not null comment '内容编号',
   game_mission int not null default 1 comment '1未完成2完成'
 )engine = innodb default charset = utf8 comment '内容关卡表';
+
+create table am_user_topic(
+  id int not null PRIMARY KEY  AUTO_INCREMENT comment '主键',
+  account varchar(32) not null comment '用户账号',
+  topic_id int not null comment '用户解锁的最终主题'
+)engine =innodb default charset =utf8 comment '用户解锁主题';

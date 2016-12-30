@@ -48,4 +48,5 @@ public class UserService {
         final User user = User.ME.getUserByPhone(userPhone);
         return new HttpResult(HttpCode.SUCCESS, HttpCode.SUCCESS_WORD, user);
     }
+
 }
