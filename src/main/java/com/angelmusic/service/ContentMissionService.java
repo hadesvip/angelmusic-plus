@@ -20,21 +20,20 @@ public class ContentMissionService {
      *
      * @param account       用户账号
      * @param contentId     内容编号
-     * @param missionStatus 关卡状态
      * @return
      */
     @Before(Tx.class)
-    public Ret updateContentMission(String account, int contentId, int missionStatus) {
+    public Ret updateContentMission(String account, int contentId) {
 
         //先查询是否存在记录
-        final ContentMission contentMission = ContentMission.ME.getContentMission(account, contentId);
+        final ContentMission contentMission = ContentMission.ME.getContentMission(account);
 
         //存在则更新
         if (contentMission != null) {
-            contentMission.set("game_mission", missionStatus).save();
+            contentMission.set("content_id", contentId).save();
         }
 
-        ContentMission.ME.saveContentMission(account, contentId, missionStatus, missionStatus);
+        ContentMission.ME.saveContentMission(account, contentId);
         return Ret.create("code", HttpCode.SUCCESS);
     }
 

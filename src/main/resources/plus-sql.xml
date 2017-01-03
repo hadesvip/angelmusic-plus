@@ -74,10 +74,8 @@
 
     <!--内容关卡-->
     <sqlGroup name="contentMission">
-        <sql id="getContentMission">select * from am_content_mission where account=? and content_id=?</sql>
         <sql id="getContentMissionByAccount">select * from am_content_mission where account=? order by content_mission_id desc limit 1</sql>
-        <sql id="updateContentMission">update am_content_mission set game_mission=? where account=? and content_id=?
-        </sql>
+        <sql id="getContentMission">select * from am_content_mission where account=?</sql>
         <sql id="getPrevContentMission">
             <![CDATA[
             select * from am_content_mission where account=? and content_id = (select content_id from am_content  where topic_id=? and `order` < ? order by `order` desc  limit 1)

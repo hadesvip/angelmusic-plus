@@ -13,20 +13,17 @@ public class ContentMission extends Model<ContentMission> {
 
     public static final ContentMission ME = new ContentMission();
 
-
     /**
      * 内容关卡
      *
-     * @param userPhone 用户手机号
-     * @param contentId 内容编号
+     * @param account 用户账号
      * @return 内容关卡
      */
-    public ContentMission getContentMission(String userPhone, int contentId) {
-        return ME.findFirst(PlusSqlKit.sql("contentMission.getContentMission"), userPhone, contentId);
+    public ContentMission getContentMission(String account) {
+        return ME.findFirst(PlusSqlKit.sql("contentMission.getContentMission"), account);
     }
 
     /**
-     *
      * @param account
      * @return
      */
@@ -48,17 +45,14 @@ public class ContentMission extends Model<ContentMission> {
     /**
      * 保存内容关卡
      *
-     * @param userPhone      手机号
+     * @param account        用户账号
      * @param topicContentId 主题内容编号
-     * @param gameMission    游戏关卡
-     * @param courseMission  课程关卡
      */
-    public boolean saveContentMission(String userPhone, int topicContentId, int gameMission, int courseMission) {
+    public boolean saveContentMission(String account, int topicContentId) {
         return
                 ME
-                        .set("user_phone", userPhone)
+                        .set("account", account)
                         .set("content_id", topicContentId)
-                        .set("game_mission", gameMission)
                         .save();
     }
 }

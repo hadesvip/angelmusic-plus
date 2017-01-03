@@ -60,7 +60,6 @@ public class OrderService {
             List<Topic> topicList = new ArrayList<>();
             final List<Content>[] contentList = new ArrayList[]{null};
 
-
             //取出用户解锁主题
             Topic.ME.getTopicList().forEach(topic -> {
                 contentList[0] = new ArrayList<>();
@@ -85,20 +84,9 @@ public class OrderService {
 
                 });
 
+
+
                 topicList.add(topic);
-
-
-                //试看
-                if (topic.getInt("topic_free") == Constant.PARTS_FREE) {
-
-
-                }
-
-                //收费
-                if (topic.getInt("free") == Constant.UNFREE) {
-
-                }
-
 
             });
 

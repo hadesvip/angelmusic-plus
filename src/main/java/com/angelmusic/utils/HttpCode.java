@@ -57,7 +57,7 @@ public interface HttpCode {
 
     String ACTIVATION_CODE_ACTIVATED_OK = "激活码激活成功";
 
-    //手机号码为空
+    //账户为空
     String USER_ACCOUNT_EMPTY = "201221";
 
     //主题加载成功

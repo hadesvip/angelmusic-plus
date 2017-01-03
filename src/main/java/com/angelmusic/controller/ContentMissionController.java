@@ -2,7 +2,6 @@ package com.angelmusic.controller;
 
 import com.angelmusic.base.BaseController;
 import com.angelmusic.service.ContentMissionService;
-import com.angelmusic.utils.Constant;
 import com.angelmusic.utils.HttpCode;
 import com.jfinal.ext.route.ControllerBind;
 import com.jfinal.kit.Ret;
@@ -27,24 +26,17 @@ public class ContentMissionController extends BaseController {
         LOGGER.info("[invoke updateContentMission]");
 
         //用户手机号，主题内容编号，类型
-        String userPhone = getPara("userPhone");
+        String account = getPara("account");
         int contentId = getParaToInt("contentId");
-        int missionStatus = getParaToInt("missionStatus");
 
         //参数校验
-        if (StrKit.isBlank(userPhone)) {
-            renderJson(Ret.create("code", HttpCode.PARAMS_INVAILD));
-            return;
-        }
-
-        //关卡状态校验
-        if ((missionStatus < Constant.MISSION_UNCOMPLETE || missionStatus < Constant.MISSION_COMPLETE)) {
-            renderJson(Ret.create("code", HttpCode.PARAMS_INVAILD));
+        if (StrKit.isBlank(account)) {
+            renderJson(Ret.create("code", HttpCode.USER_ACCOUNT_EMPTY).getData());
             return;
         }
 
         //更新用户关卡
-        renderJson(ContentMissionService.ME.updateContentMission(userPhone, contentId, missionStatus));
+        renderJson(ContentMissionService.ME.updateContentMission(account, contentId));
 
         LOGGER.info("[leave updateContentMission]");
     }
