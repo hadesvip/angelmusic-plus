@@ -76,7 +76,6 @@ public class OrderService {
                             int gameMission = prevMission.getInt("game_mission");
                             if (gameMission == Constant.MISSION_COMPLETE) {
 
-
                             }
                         }
 
