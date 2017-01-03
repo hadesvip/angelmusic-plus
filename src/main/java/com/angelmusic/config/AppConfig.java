@@ -75,7 +75,6 @@ public class AppConfig extends JFinalConfig {
 
         //sql配置文件方式
         me.add(new PlusSqlIXmlPlugin());
-        me.add(new EhCachePlugin());
     }
 
     /**
