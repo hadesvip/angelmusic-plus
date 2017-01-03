@@ -27,6 +27,16 @@ public class ContentMission extends Model<ContentMission> {
 
 
     /**
+     * 获取上一个内容关卡
+     *
+     * @return
+     */
+    public ContentMission getPrevMission(String account, int topicId, int order) {
+        return ME.findFirst("contentMission.getPrevContentMission", account, topicId, order);
+    }
+
+
+    /**
      * 保存内容关卡
      *
      * @param userPhone      手机号

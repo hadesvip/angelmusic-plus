@@ -49,17 +49,17 @@
     <sqlGroup name="content">
         <sql id="getTopicContentList">
             SELECT
-                t.topic_id,
-                t.name,
-                t.free topic_free,
-                c.content_id,
-                c.name content_name,
-                c.free content_free,
-                c.course_name,
-                c.course_video_path,
-                c.game_name
+            t.topic_id,
+            t.name,
+            t.free topic_free,
+            c.content_id,
+            c.name content_name,
+            c.free content_free,
+            c.course_name,
+            c.course_video_path,
+            c.game_name
             FROM
-                am_topic t
+            am_topic t
             LEFT JOIN
             am_content c ON t.topic_id = c.topic_id
             ORDER BY c.`order`
@@ -75,6 +75,11 @@
     <sqlGroup name="contentMission">
         <sql id="getContentMission">select * from am_content_mission where account=? and content_id=?</sql>
         <sql id="updateContentMission">update am_content_mission set game_mission=? where account=? and content_id=?
+        </sql>
+        <sql id="getPrevContentMission">
+            <![CDATA[
+            select * from am_content_mission where account=? and content_id = (select content_id from am_content  where topic_id=? and `order` < ? order by `order` desc  limit 1)
+            ]]>
         </sql>
     </sqlGroup>
 

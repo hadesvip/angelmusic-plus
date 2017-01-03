@@ -1,7 +1,6 @@
 package com.angelmusic.dao.model;
 
 import com.angelmusic.plugin.sql.PlusSqlKit;
-import com.angelmusic.utils.Constant;
 import com.jfinal.ext.plugin.tablebind.TableBind;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
@@ -18,23 +17,16 @@ public class Topic extends Model<Topic> {
 
     public final static Topic ME = new Topic();
 
-    //当前用户主题是否锁住1锁住2未锁
-    private int lock = Constant.LOCKED;
+    private List<Content> contentList;
 
-    public int getLock() {
-        return lock;
-    }
-
-    public int setLock(int lock) {
-        this.lock = lock;
-        return this.lock;
+    public void setContentList(List<Content> contentList) {
+        this.contentList = contentList;
     }
 
     @Override
     protected Map<String, Object> getAttrs() {
         Map<String, Object> attrs = super.getAttrs();
-        attrs.put("lock", lock);
-
+        attrs.put("contentList", contentList);
         return attrs;
     }
 

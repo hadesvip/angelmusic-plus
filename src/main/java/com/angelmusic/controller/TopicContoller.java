@@ -4,6 +4,7 @@ import com.angelmusic.base.BaseController;
 import com.angelmusic.service.TopicService;
 import com.angelmusic.utils.HttpCode;
 import com.jfinal.ext.route.ControllerBind;
+import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +26,9 @@ public class TopicContoller extends BaseController {
 
         String userPhone = getPara("userPhone");
 
-        //用户编号为空
+        //用户账号为空
         if (StrKit.isBlank(userPhone)) {
-            error(HttpCode.USER_PHONE_EMPTY, HttpCode.USER_PHONE_EMPTY_WORD);
+            renderJson(Ret.create("code", HttpCode.USER_ACCOUNT_EMPTY).getData());
             return;
         }
 

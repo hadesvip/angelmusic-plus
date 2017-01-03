@@ -58,18 +58,7 @@ public interface HttpCode {
     String ACTIVATION_CODE_ACTIVATED_OK = "激活码激活成功";
 
     //手机号码为空
-    String USER_PHONE_EMPTY = "201221";
-    String USER_PHONE_EMPTY_WORD = "用户手机号码为空";
-
-    //上传用户信息成功
-    String UPLOAD_USERINFO_SUCCESS_WORD = "上传用户信息成功";
-
-    //上传用户信息失败
-    String UPLOAD_USERINFO_FAIL_WORD = "上传用户信息失败";
-
-    //用户已经长传过
-    String UPLOAD_USER_EXISTS = "201222";
-    String UPLOAD_USER_EXISTS_WORD = "用户信息已经存在";
+    String USER_ACCOUNT_EMPTY = "201221";
 
     //主题加载成功
     String TOPICS_LOAD_SUCCESS_WORD = "主题加载成功";
@@ -79,7 +68,6 @@ public interface HttpCode {
 
     //参数异常
     String PARAMS_INVAILD = "201225";
-    String CREATEORDERRECORD_PARAMS_INVAILD = "用户编号,消费金额，产品，支付类型不可以为空";
 
     //订单金额不可以小于0
     String ORDER_RECORD_MONEY_LESS_ZERO = "201228";
@@ -87,16 +75,11 @@ public interface HttpCode {
     //订单类型只能是激活码和大礼包
     String ORDER_TYPE_OVER = "201229";
 
-
     //订单更新失败
     String ORDER_UPDATE_FAIL = "201226";
 
     //主题编号和用户编号不能为空
     String TOPIC_USER_EMPTY_WORD = "主题编号和用户手机号不能为空";
-
-
-    //关卡更新成功
-    String MISSION_UPDATE_SUCCESS_WORD = "关卡状态更新成功";
 
     //只支持post请求
     String HTTP_ONLY_SUPPORT_POST = "202";

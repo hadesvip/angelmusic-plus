@@ -64,30 +64,33 @@ public class OrderService {
             //取出用户解锁主题
             Topic.ME.getTopicList().forEach(topic -> {
                 contentList[0] = new ArrayList<>();
-                //试看
-                if (topic.getInt("topic_free") == Constant.PARTS_FREE) {
-                    //内部内容判断
-                    Content.ME.getTopicContentList(topic.getInt("topic_id")).forEach(content -> {
-                        if (content.getInt("content_free") == Constant.CONTENT_FREE) {
-                            contentList[0].add(content);
-                        } else {
-                            //用户上一个关卡是否通关，并且用户是否购买了该主题
-                            ContentMission contentMission = ContentMission.ME.getContentMission(account, content.getInt("content_id"));
-                            if (contentMission != null) {
-                                int gameMission = contentMission.getInt("game_mission");
-                                if (gameMission == Constant.MISSION_COMPLETE) {
 
-                                }
+                //内部内容判断
+                Content.ME.getTopicContentList(topic.getInt("topic_id")).forEach(content -> {
+                    if (content.getInt("content_free") == Constant.CONTENT_FREE) {
+                        contentList[0].add(content);
+                    } else {
+                        //用户上一个关卡是否通关，并且用户是否购买了该主题
+                        ContentMission prevMission = ContentMission.ME.getPrevMission(account, topic.getInt("topic_id"), content.getInt("order"));
+                        if (prevMission != null) {
+                            int gameMission = prevMission.getInt("game_mission");
+                            if (gameMission == Constant.MISSION_COMPLETE) {
+
+
                             }
-
-
                         }
 
 
-                    });
+                    }
 
 
-                    topicList.add(topic);
+                });
+
+                topicList.add(topic);
+
+
+                //试看
+                if (topic.getInt("topic_free") == Constant.PARTS_FREE) {
 
 
                 }
