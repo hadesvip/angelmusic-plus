@@ -25,6 +25,15 @@ public class ContentMission extends Model<ContentMission> {
         return ME.findFirst(PlusSqlKit.sql("contentMission.getContentMission"), userPhone, contentId);
     }
 
+    /**
+     *
+     * @param account
+     * @return
+     */
+    public ContentMission getContentMissionByAccount(String account) {
+        return ME.findFirst(PlusSqlKit.sql("contentMission.getContentMissionByAccount"), account);
+    }
+
 
     /**
      * 获取上一个内容关卡

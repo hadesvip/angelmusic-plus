@@ -62,6 +62,7 @@
             am_topic t
             LEFT JOIN
             am_content c ON t.topic_id = c.topic_id
+            WHERE t.topic_id = ?
             ORDER BY c.`order`
         </sql>
         <sql id="prevContent">
@@ -74,6 +75,7 @@
     <!--内容关卡-->
     <sqlGroup name="contentMission">
         <sql id="getContentMission">select * from am_content_mission where account=? and content_id=?</sql>
+        <sql id="getContentMissionByAccount">select * from am_content_mission where account=? order by content_mission_id desc limit 1</sql>
         <sql id="updateContentMission">update am_content_mission set game_mission=? where account=? and content_id=?
         </sql>
         <sql id="getPrevContentMission">
