@@ -36,8 +36,8 @@
         <sql id="getOrderCountByUserId">select count(1) from am_order_record order by order_date desc where userPhone=?
             and payresult=1
         </sql>
-        <sql id="getOrderList">select * from am_order_record where pay_result =1 and user_phone=?</sql>
-        <sql id="updateOrderRecord">update am_order_record set pay_result =? where userPhone=?</sql>
+        <sql id="getOrderList">select * from am_order_record where pay_result =1 and account=? order by order_date</sql>
+        <sql id="updateOrderRecord">update am_order_record set pay_result =? where account=?</sql>
     </sqlGroup>
 
     <!--大礼包-->
@@ -70,6 +70,7 @@
                 select * from am_content c left join am_topic_content tc  on c.content_id = tc.content_id  where c.content_id < ? and  topic_id=?  order by tc.`order` desc limit 1
              ]]>
         </sql>
+        <sql id="getNextContent">select * from am_content where content_id > ? limit 1</sql>
     </sqlGroup>
 
     <!--内容关卡-->

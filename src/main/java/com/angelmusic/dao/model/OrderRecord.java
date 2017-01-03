@@ -6,7 +6,6 @@ import com.jfinal.ext.plugin.tablebind.TableBind;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -32,28 +31,28 @@ public class OrderRecord extends Model<OrderRecord> {
     /**
      * 获取用户订单记录
      *
-     * @param userPhone 用户手机号
+     * @param account 用户账号
      * @return
      */
-    public List<OrderRecord> getUserOrderList(String userPhone) {
-        return ME.find(PlusSqlKit.sql("order.getOrderList"), userPhone);
+    public List<OrderRecord> getUserOrderList(String account) {
+        return ME.find(PlusSqlKit.sql("order.getOrderList"), account);
     }
 
 
     /**
      * 保存订单
      *
-     * @param orderId   订单编号
-     * @param userPhone 用户手机号
-     * @param money     消费金额
-     * @param product   产品
-     * @param type      订单类型
+     * @param orderId 订单编号
+     * @param account 用户账号
+     * @param money   消费金额
+     * @param product 产品
+     * @param type    订单类型
      */
-    public boolean saveOrderRecord(String orderId, String userPhone, String money, String product, int type) {
+    public boolean saveOrderRecord(String orderId, String account, String money, String product, int type) {
         return
                 ME
                         .set("order_id", orderId)
-                        .set("account", userPhone)
+                        .set("account", account)
                         .set("money", money)
                         .set("product", product)
                         .set("order_date", new Date())

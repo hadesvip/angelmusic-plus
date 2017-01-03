@@ -6,8 +6,10 @@ import com.angelmusic.utils.HttpCode;
 import com.jfinal.aop.Before;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.tx.Tx;
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -64,26 +66,73 @@ public class OrderService {
             Topic.ME.getTopicList().forEach(topic -> {
                 contentList[0] = new ArrayList<>();
 
+                //试用
+                if (topic.getInt("free") == Constant.PARTS_FREE) {
+                    topicList.add(topic);
+                } else {
+
+                    final int[] nums = new int[]{0};
+                    //订单记录
+                    OrderRecord.ME.getUserOrderList(account).forEach(orderRecord -> {
+                        DateTime recordDate = new DateTime(orderRecord.getDate("order_date"));
+                        String product = orderRecord.getStr("product");
+                        int type = orderRecord.getInt("type");
+
+                        //大礼包
+                        if (type == Constant.ORDER_TYPE_GIFT_PACK) {
+                            GiftPack giftPack = GiftPack.ME.getGiftPackByName(product);
+
+                            //时效
+                            int months = giftPack.getInt("effective_time");
+                            DateTime giftPackTime = recordDate.plusMonths(months);
+                            
+
+
+
+                        }
+
+                        //二维码
+                        if (type == Constant.ORDER_TYPE_ACTIVATECODE) {
+                            ActivationCode activationCode = ActivationCode.ME.getActivationCodeByCode(product);
+
+                            //时效
+                            int months = activationCode.getInt("effective_time");
+                            DateTime activationCodeTime = recordDate.plusMonths(months);
+
+
+                        }
+
+
+                        DateTime now = DateTime.now();
+                        int lockNum = 1;
+                        int num = 0;
+                        //因子
+                        int factor = now.getYear() > recordDate.getYear() ? (now.getYear() - recordDate.getYear()) * 12 : 0;
+                        if (now.getDayOfMonth() >= recordDate.getDayOfMonth()) {
+                            num = factor + now.getMonthOfYear() - recordDate.getMonthOfYear() + lockNum;
+                        } else {
+                            num = factor + now.getMonthOfYear() - recordDate.getMonthOfYear();
+                        }
+
+
+                    });
+
+
+                }
+
                 //内部内容判断
                 Content.ME.getTopicContentList(topic.getInt("topic_id")).forEach(content -> {
                     if (content.getInt("content_free") == Constant.CONTENT_FREE) {
                         contentList[0].add(content);
                     } else {
                         //用户上一个关卡是否通关，并且用户是否购买了该主题
-                        ContentMission prevMission = ContentMission.ME.getPrevMission(account, topic.getInt("topic_id"), content.getInt("order"));
-                        if (prevMission != null) {
-                            int gameMission = prevMission.getInt("game_mission");
-                            if (gameMission == Constant.MISSION_COMPLETE) {
+                        final ContentMission contentMission = ContentMission.ME.getContentMission(account);
+                        if (contentMission.getInt("content_id") + 1 >= content.getInt("content_id")) {
 
-                            }
                         }
 
-
                     }
-
-
                 });
-
 
 
                 topicList.add(topic);
@@ -131,6 +180,49 @@ public class OrderService {
         });
 
         return buyMonths[0];
+    }
+//
+//    public boolean checkUserTopic(String account) {
+//        //获取所有主题
+//        OrderRecord.ME.getUserOrderList(account).forEach(orderRecord -> {
+//            DateTime recordDate = new DateTime(orderRecord.getDate("order_date"));
+//            DateTime now = DateTime.now();
+//            int defaultTopicNum = 1;
+//            int num = 0;
+//            //因子
+//            int factor = now.getYear() > recordDate.getYear() ? (now.getYear() - recordDate.getYear()) * 12 : 0;
+//            if (now.getDayOfMonth() >= recordDate.getDayOfMonth()) {
+//                num = factor + now.getMonthOfYear() - recordDate.getMonthOfYear() + defaultTopicNum;
+//            } else {
+//                num = factor + now.getMonthOfYear() - recordDate.getMonthOfYear();
+//            }
+//
+//
+//        });
+//
+//        return false;
+//    }
+
+    public static void main(String[] args) {
+
+        System.out.println(new Date(2016, 6, 3));
+
+        DateTime recordDate = new DateTime(new Date(2016, 6, 5));
+        DateTime now = DateTime.now();
+        int defaultTopicNum = 1;
+        int num = 0;
+        //因子
+        int factor = now.getYear() > recordDate.getYear() - 1900 ? (now.getYear() % (recordDate.getYear() - 1900)) * 12 : 0;
+        System.out.println(factor);
+        if (now.getDayOfMonth() >= recordDate.getDayOfMonth()) {
+            num = factor + now.getMonthOfYear() - recordDate.getMonthOfYear() + defaultTopicNum;
+            System.out.println(factor);
+        } else {
+            num = factor + now.getMonthOfYear() - recordDate.getMonthOfYear();
+            System.out.println("-" + factor);
+        }
+
+        System.out.println(num);
     }
 
 

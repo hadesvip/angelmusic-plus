@@ -58,5 +58,15 @@ public class Content extends Model<Content> {
         return ME.find(PlusSqlKit.sql("content.getTopicContentList"), topicId);
     }
 
+    /**
+     * 获取内容
+     *
+     * @param contentId 内容编号
+     * @return
+     */
+    public Content getNextContent(int contentId) {
+        return ME.findFirst(PlusSqlKit.sql("content.getNextContent"), contentId);
+    }
+
 
 }

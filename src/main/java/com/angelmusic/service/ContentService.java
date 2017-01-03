@@ -63,13 +63,13 @@ public class ContentService {
             int prevTopContentId = prevContent.getInt("topic_content_id");
 
             //上一个关卡用户是否完成
-            ContentMission contentMission = ContentMission.ME.getContentMission(userPhone, prevTopContentId);
+            ContentMission contentMission = ContentMission.ME.getContentMission(userPhone);
 
             //任务完成并且用户购买了此关卡主题
             if (contentMission != null && contentMission.getInt("game_mission") == Constant.MISSION_COMPLETE
                     && contentMission.getInt("course_mission") == Constant.MISSION_COMPLETE && monthIndex[0] <= userMonths) {
                 content.setLock(Constant.UNLOCKED);
-                //  }
+
             }
         });
         return new HttpResult(HttpCode.SUCCESS, null, contentList);

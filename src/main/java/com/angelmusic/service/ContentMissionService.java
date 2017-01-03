@@ -1,5 +1,6 @@
 package com.angelmusic.service;
 
+import com.angelmusic.dao.model.Content;
 import com.angelmusic.dao.model.ContentMission;
 import com.angelmusic.utils.HttpCode;
 import com.jfinal.aop.Before;
@@ -18,8 +19,8 @@ public class ContentMissionService {
     /**
      * 更新关卡状态
      *
-     * @param account       用户账号
-     * @param contentId     内容编号
+     * @param account   用户账号
+     * @param contentId 内容编号
      * @return
      */
     @Before(Tx.class)
@@ -34,7 +35,8 @@ public class ContentMissionService {
         }
 
         ContentMission.ME.saveContentMission(account, contentId);
-        return Ret.create("code", HttpCode.SUCCESS);
+
+        return Ret.create("code", HttpCode.SUCCESS).put("detail", Content.ME.getNextContent(contentId));
     }
 
 }

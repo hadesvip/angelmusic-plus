@@ -36,7 +36,7 @@ public class ContentMissionController extends BaseController {
         }
 
         //更新用户关卡
-        renderJson(ContentMissionService.ME.updateContentMission(account, contentId));
+        renderJson(ContentMissionService.ME.updateContentMission(account, contentId).getData());
 
         LOGGER.info("[leave updateContentMission]");
     }
