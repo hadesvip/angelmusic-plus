@@ -25,7 +25,7 @@ public class ContentService {
      * @param userPhone 用户手机号
      * @return
      */
-    public HttpResult getTopicContentList(String topicId, String userPhone) {
+    public HttpResult getTopicContentList(int topicId, String userPhone) {
 
         //获取主题下面的内容
         final List<Content> contentList = Content.ME.getTopicContentList(topicId);
@@ -37,7 +37,7 @@ public class ContentService {
         final List<Topic> topicList = Topic.ME.getTopicList();
         final int[] monthIndex = {0};
         for (int i = 0; i < topicList.size(); i++) {
-            if (topicList.get(i).getInt("topic_id") == Integer.parseInt(topicId)) {
+            if (topicList.get(i).getInt("topic_id") == topicId) {
                 monthIndex[0] = i + 1;
                 break;
             }
@@ -52,24 +52,24 @@ public class ContentService {
             int contentId = content.getInt("content_id");
 
             //免费
-            if (free == Constant.FREE) {
-                content.setLock(Constant.UNLOCKED);
-            }
+            // if (free == Constant.UNFREEFREE) {
+            content.setLock(Constant.UNLOCKED);
+            // }
 
             //排除第一个
-            if (free != Constant.FREE && contentList.stream().findFirst().get().getInt("content_id") != contentId) {
-                //查询上一个content
-                Content prevContent = content.getPrevContent(Integer.parseInt(topicId), contentId);
-                int prevTopContentId = prevContent.getInt("topic_content_id");
+            // if (free != Constant.FREE && contentList.stream().findFirst().get().getInt("content_id") != contentId) {
+            //查询上一个content
+            Content prevContent = content.getPrevContent(topicId, contentId);
+            int prevTopContentId = prevContent.getInt("topic_content_id");
 
-                //上一个关卡用户是否完成
-                ContentMission contentMission = ContentMission.ME.getContentMission(userPhone, prevTopContentId);
+            //上一个关卡用户是否完成
+            ContentMission contentMission = ContentMission.ME.getContentMission(userPhone, prevTopContentId);
 
-                //任务完成并且用户购买了此关卡主题
-                if (contentMission != null && contentMission.getInt("game_mission") == Constant.MISSION_COMPLETE
-                        && contentMission.getInt("course_mission") == Constant.MISSION_COMPLETE && monthIndex[0] <= userMonths) {
-                    content.setLock(Constant.UNLOCKED);
-                }
+            //任务完成并且用户购买了此关卡主题
+            if (contentMission != null && contentMission.getInt("game_mission") == Constant.MISSION_COMPLETE
+                    && contentMission.getInt("course_mission") == Constant.MISSION_COMPLETE && monthIndex[0] <= userMonths) {
+                content.setLock(Constant.UNLOCKED);
+                //  }
             }
         });
         return new HttpResult(HttpCode.SUCCESS, null, contentList);

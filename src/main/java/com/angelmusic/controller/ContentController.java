@@ -33,7 +33,7 @@ public class ContentController extends BaseController {
             return;
         }
 
-        renderJson(ContentService.ME.getTopicContentList(topicId, userPhone));
+        renderJson(ContentService.ME.getTopicContentList(Integer.parseInt(topicId), userPhone));
 
         LOGGER.info("[leave topicContentList]");
     }
