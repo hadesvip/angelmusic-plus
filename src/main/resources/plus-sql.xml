@@ -25,7 +25,7 @@
 
     <!--主题信息-->
     <sqlGroup name="topic">
-        <sql id="allTopic">select topic_id,name,topic_desc,topic_date,free from am_topic order by topic_date</sql>
+        <sql id="allTopic">select topic_id,name,topic_desc,free from am_topic order by `order`</sql>
         <sql id="getNotFreeTopicCount">select count(1) from am_topic where free=1</sql>
         <sql id="getTopic">select * from am_topic where topic_id=?</sql>
         <sql id="getToppicList">select * from am_topic order by `order`</sql>

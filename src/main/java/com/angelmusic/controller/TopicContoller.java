@@ -1,6 +1,7 @@
 package com.angelmusic.controller;
 
 import com.angelmusic.base.BaseController;
+import com.angelmusic.dao.model.Topic;
 import com.angelmusic.service.TopicService;
 import com.angelmusic.utils.HttpCode;
 import com.jfinal.ext.route.ControllerBind;
@@ -24,19 +25,19 @@ public class TopicContoller extends BaseController {
     public void loadTopicList() {
         LOGGER.info("[invoke loadTopicList]");
 
-        String userPhone = getPara("userPhone");
+        String account = getPara("account");
 
         //用户账号为空
-        if (StrKit.isBlank(userPhone)) {
+        if (StrKit.isBlank(account)) {
             renderJson(Ret.create("code", HttpCode.USER_ACCOUNT_EMPTY).getData());
             return;
         }
 
         //加载用户主题
-        renderJson(TopicService.TOPICSERVICE.loadTopicList(userPhone));
+        Ret data = TopicService.ME.getData(account);
 
+        renderJson(data.getData());
         LOGGER.info("[leave loadTopicList]");
+        return;
     }
-
-
 }
