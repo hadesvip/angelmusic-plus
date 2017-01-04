@@ -33,6 +33,33 @@ def closeDB():
     cur.close()
     conn.close()
 
+def getPack(pro):
+    packSql = "select * from am_gift_pack WHERE gift_pack_id = '%s'" %(pro)
+    cur.execute(packSql)
+    packResu = cur.fetchone()
+    return packResu;
+
+def getActive(pro):
+    activeSql = "select * from am_activation_code WHERE code = '%s'" %(pro)
+    cur.execute(activeSql)
+    activeRsu = cur.fetchone()
+    return activeRsu;
+
+def compareDate(d, n):
+    dy = d.year
+    dm = d.month
+    dd = d.day
+
+    ny = n.year
+    nm = n.month
+    nd = n.day
+
+    if datetime.date(dy,dm,dd) > datetime.date(ny,nm,nd):
+        return 1
+    elif datetime.date(dy,dm,dd) == datetime.date(ny,nm,nd):
+        return 0
+    else:
+        return -1
 
 def getTheme(d, n):
     dy = d.year
@@ -79,23 +106,30 @@ def updateTheme(pageSize):
                         else:
                             themCount = 0;
                             m = 0;
-                            themCount = themCount + getTheme(orderRes[0]['order_date'], datetime.date.today())
                             for r1 in orderRes:
-                                #从第二条开始进行循环增加
-                                if m > 0:
-                                    #激活码
+                                #判断订单是正在解锁中还是没有开始解锁（第一个订单未解锁完，续费买了另一个大礼包,上一个没有解锁完，themecount还是0
+                                if compareDate(r1['order_date'],datetime.date.today()) != 1:
+                                    effCount = 0
+                                    effCount = getTheme(r1['order_date'], datetime.date.today())
+                                    #判断是激活码还是大礼包
                                     if r1['type'] == 1:
-                                        themCount = themCount + 12
-                                    #大礼包
+                                        #查询激活码
+                                        a1 = getActive(r1['product'])
+                                        if a1 is not None:
+                                            #判断themecount是不是大于激活码有效主题月 大于 取有效月，不大于直接themcount
+                                            if effCount > a1['effective_time']:
+                                                effCount = a1['effective_time']
                                     elif r1['type'] == 2:
-                                        packSql = "select * from am_gift_pack WHERE gift_pack_id = '%s'" %(r1['product'])
-                                        cur.execute(packSql)
-                                        packResu = cur.fetchone()
-                                        if packResu is not None:
-                                            #加大礼包的解锁主题数
-                                            themCount = themCount + packResu['effective_time']
-                                m = m + 1
+                                        #查询大礼包
+                                        p1 = getPack(r1['product'])
+                                        if p1 is not None:
+                                            #判断themecount是不是大于礼包有效主题月 大于 取有效月，不大于直接themcount
+                                            if effCount > p1['effective_time']:
+                                                effCount = p1['effective_time']
 
+                                    themCount = themCount + effCount
+                                else:
+                                    continue;
                             #接下来操作用户的已解锁主题数
                             selectUserSql = "select * from am_user_topic WHERE account = '%s' ORDER BY id DESC LIMIT  1" % (r['account'])
                             cur.execute(selectUserSql)
