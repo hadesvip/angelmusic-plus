@@ -20,7 +20,7 @@
 
     <!--用户主题信息-->
     <sqlGroup name="userTopic">
-        <sql id="getUserTopic">select * from am_user_topic limit 1</sql>
+        <sql id="getUserTopic">select * from am_user_topic where account=? limit 1</sql>
     </sqlGroup>
 
     <!--主题信息-->
