@@ -18,9 +18,9 @@
         <sql id="updateActivationCodeStatus">update am_activation_code set status=? where code=?</sql>
     </sqlGroup>
 
-    <!--用户信息-->
-    <sqlGroup name="user">
-        <sql id="getUserByPhone">select user_id,user_name,user_phone,create_date from am_user</sql>
+    <!--用户主题信息-->
+    <sqlGroup name="userTopic">
+        <sql id="getUserTopic">select * from am_user_topic limit 1</sql>
     </sqlGroup>
 
     <!--主题信息-->
@@ -29,6 +29,23 @@
         <sql id="getNotFreeTopicCount">select count(1) from am_topic where free=1</sql>
         <sql id="getTopic">select * from am_topic where topic_id=?</sql>
         <sql id="getToppicList">select * from am_topic order by `order`</sql>
+        <sql id="getTopicByOrder">
+            SELECT
+            t.topic_id,
+            t.name,
+            t.free topic_free,
+            c.content_id,
+            c.name content_name,
+            c.free content_free,
+            c.course_name,
+            c.course_video_path,
+            c.game_name
+            FROM
+            am_topic t
+            LEFT JOIN
+            am_content c ON t.topic_id = c.topic_id
+            WHERE t.order = ?
+        </sql>
     </sqlGroup>
 
     <!--获取用户订购成功的最新的订单记录-->
@@ -37,7 +54,11 @@
             and payresult=1
         </sql>
         <sql id="getOrderList">select * from am_order_record where pay_result =1 and account=? order by order_date</sql>
-        <sql id="updateOrderRecord">update am_order_record set pay_result =? where account=?</sql>
+        <sql id="updateOrderRecord">update am_order_record set pay_result =?,start_time=?,end_time=? where order_id=?
+        </sql>
+        <sql id="getRecentOrder">select * from am_order_record where account=? and pay_result =1 order by order_date
+            limit 1
+        </sql>
     </sqlGroup>
 
     <!--大礼包-->
@@ -76,7 +97,9 @@
 
     <!--内容关卡-->
     <sqlGroup name="contentMission">
-        <sql id="getContentMissionByAccount">select * from am_content_mission where account=? order by content_mission_id desc limit 1</sql>
+        <sql id="getContentMissionByAccount">select * from am_content_mission where account=? order by
+            content_mission_id desc limit 1
+        </sql>
         <sql id="getContentMission">select * from am_content_mission where account=?</sql>
         <sql id="getPrevContentMission">
             <![CDATA[

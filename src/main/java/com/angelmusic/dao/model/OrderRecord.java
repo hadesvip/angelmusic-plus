@@ -39,14 +39,12 @@ public class OrderRecord extends Model<OrderRecord> {
     }
 
     /**
-     *
      * @param account
      * @return
      */
     public OrderRecord getUserOrder(String account) {
         return ME.findFirst(PlusSqlKit.sql("order.getUserOrder"), account);
     }
-
 
 
     /**
@@ -85,7 +83,17 @@ public class OrderRecord extends Model<OrderRecord> {
      * @param orderId   订单编号
      * @param payResult 支付结果
      */
-    public boolean updatePayResult(String orderId, String payResult) {
-        return Db.update(PlusSqlKit.sql("order.updateOrderRecord"), payResult, orderId) > 0;
+    public boolean updatePayResult(String orderId, String payResult, Date startTime, Date endTime) {
+        return Db.update(PlusSqlKit.sql("order.updateOrderRecord"), payResult, startTime, endTime, orderId) > 0;
+    }
+
+    /**
+     * 获取最近的订单
+     *
+     * @param account
+     * @return
+     */
+    public OrderRecord getRecentOrder(String account) {
+        return findFirst(PlusSqlKit.sql("order.getRecentOrder"), account);
     }
 }

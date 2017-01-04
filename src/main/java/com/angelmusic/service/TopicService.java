@@ -51,7 +51,7 @@ public class TopicService {
                 //取得这个主题的内容
                 Integer topic_id = freeTopic.getInt("topic_id");
 
-                List<Content> contents = Content.ME.getTopicContentList(freeTopic.getInt("topic_id"));
+                List<Content> contents = Content.ME.getTopicContentList(topic_id);
                 //放入符合条件的content
                 List<Content> cList = new ArrayList<>();
                 if (CollectionUtils.isNotEmpty(contents)) {
@@ -115,48 +115,4 @@ public class TopicService {
         ret.put("detail", returnMap);
         return ret;
     }
-
-    /**
-     * 加载主题
-     *
-     * @param userId 用户编号
-     * @return
-     */
-    public HttpResult loadTopicList(String userId) {
-        //加载所有主题
-        List<Topic> topics = Topic.ME.topics();
-
-        //计算出用户总共买了几个月
-        final int buyMonths = OrderService.ME.userMonths(userId);
-
-        //设置主题锁状态
-        final int[] count = {0};
-        topics.forEach(topic -> {
-            int free = topic.getInt("free");
-
-            //免费
-            /*if (free == Constant.FREE || free == Constant.PARTS_FREE) {
-                topic.setLock(Constant.UNLOCKED);
-            } else {
-                //收费主题
-                count[0]++;
-
-                //主题时间
-                Date topicDate = topic.getDate("topic_date");
-                DateTime dateTime = new DateTime(topicDate);
-                int topicMillis = dateTime.getYear() + dateTime.getMonthOfYear();
-                int nowMillis = DateTime.now().getYear() + DateTime.now().getMonthOfYear();
-
-                //是否在当前时间之前开区间
-                if (topicMillis <= nowMillis && count[0] <= buyMonths) {
-                    topic.setLock(Constant.UNLOCKED);
-                }
-            }*/
-
-        });
-
-        return new HttpResult(HttpCode.SUCCESS, HttpCode.TOPICS_LOAD_SUCCESS_WORD, topics);
-    }
-
-
 }

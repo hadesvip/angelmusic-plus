@@ -1,7 +1,7 @@
 package com.angelmusic.utils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import org.joda.time.DateTime;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -12,6 +12,7 @@ public class DateUtils {
 
     /**
      * 获取当前主题
+     *
      * @param start
      * @param end
      * @return
@@ -38,7 +39,7 @@ public class DateUtils {
         int d2 = startCalendar.get(Calendar.DAY_OF_MONTH);
 
         //判断天
-        if(d1 >= d2){
+        if (d1 >= d2) {
             themeCount += 1;
         }
         return themeCount;

@@ -8,9 +8,7 @@ import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -53,177 +51,128 @@ public class OrderService {
      * @param account   账号
      * @return
      */
-    @Before(Tx.class)
     public Ret updateOrderRecord(String orderId, String payResult, String account) {
 
-        //更新成功
-        if (OrderRecord.ME.updatePayResult(orderId, payResult)) {
+        Topic topic = null;
+        //获取订单
+        final OrderRecord order = OrderRecord.ME.getOrderByOrderId(orderId);
+        if (order == null) {
+            return Ret.create("code", HttpCode.ORDER_NOT_EXIST);
+        }
 
-            List<Topic> topicList = new ArrayList<>();
-            final List<Content>[] contentList = new ArrayList[]{null};
+        //更新权益结束时间
+        calcOrderEndTime(account, order, orderId, payResult);
 
-            //取出用户解锁主题
-            Topic.ME.getTopicList().forEach(topic -> {
-                contentList[0] = new ArrayList<>();
+        //用户目前解锁的主题数目
+        UserTopic userTopic = UserTopic.ME.getUserTopic(account);
+        if (userTopic != null) {
+            int topicCount = userTopic.getInt("topic_count");
+            final int[] count = {topicCount};
+            final int[] nums = {0};
 
-                //试用
-                if (topic.getInt("free") == Constant.PARTS_FREE) {
-                    topicList.add(topic);
-                } else {
+            //更新主题数
+            OrderRecord.ME.getUserOrderList(account).forEach(orderRecord -> {
 
-                    final int[] nums = new int[]{0};
-                    //订单记录
-                    OrderRecord.ME.getUserOrderList(account).forEach(orderRecord -> {
-                        DateTime recordDate = new DateTime(orderRecord.getDate("order_date"));
-                        String product = orderRecord.getStr("product");
-                        int type = orderRecord.getInt("type");
+                //到期时间
+                final DateTime orderEndTime = new DateTime(orderRecord.getDate("end_time"));
+                final DateTime orderStartTime = new DateTime(orderRecord.getDate("start_time"));
+                final int orderType = orderRecord.getInt("type");
+                final String product = orderRecord.getStr("product");
+
+                //权益在今天之前的进行计算,表示已经开始进行权益了
+                DateTime now = DateTime.now();
+                int nowDays = now.getYear() + now.getMonthOfYear() + now.getDayOfMonth();
+                int orderDays = orderStartTime.getYear() + orderStartTime.getMonthOfYear() + orderStartTime.getDayOfMonth();
+                int endDays = orderEndTime.getYear() + orderEndTime.getMonthOfYear() + orderEndTime.getDayOfMonth();
+
+                //权益使用中，权益结束
+                if (nowDays >= orderDays) {
+                    nums[0] = 0;
+
+                    //过期
+                    if (endDays <= nowDays) {
 
                         //大礼包
-                        if (type == Constant.ORDER_TYPE_GIFT_PACK) {
+                        if (orderType == Constant.ORDER_TYPE_GIFT_PACK) {
                             GiftPack giftPack = GiftPack.ME.getGiftPackByName(product);
-
-                            //时效
                             int months = giftPack.getInt("effective_time");
-                            DateTime giftPackTime = recordDate.plusMonths(months);
-                            
-
-
-
+                            nums[0] = months;
                         }
-
                         //二维码
-                        if (type == Constant.ORDER_TYPE_ACTIVATECODE) {
+                        if (orderType == Constant.ORDER_TYPE_ACTIVATECODE) {
                             ActivationCode activationCode = ActivationCode.ME.getActivationCodeByCode(product);
-
-                            //时效
                             int months = activationCode.getInt("effective_time");
-                            DateTime activationCodeTime = recordDate.plusMonths(months);
-
-
+                            nums[0] = months;
                         }
-
-
-                        DateTime now = DateTime.now();
-                        int lockNum = 1;
-                        int num = 0;
-                        //因子
-                        int factor = now.getYear() > recordDate.getYear() ? (now.getYear() - recordDate.getYear()) * 12 : 0;
-                        if (now.getDayOfMonth() >= recordDate.getDayOfMonth()) {
-                            num = factor + now.getMonthOfYear() - recordDate.getMonthOfYear() + lockNum;
-                        } else {
-                            num = factor + now.getMonthOfYear() - recordDate.getMonthOfYear();
-                        }
-
-
-                    });
-
-
-                }
-
-                //内部内容判断
-                Content.ME.getTopicContentList(topic.getInt("topic_id")).forEach(content -> {
-                    if (content.getInt("content_free") == Constant.CONTENT_FREE) {
-                        contentList[0].add(content);
-                    } else {
-                        //用户上一个关卡是否通关，并且用户是否购买了该主题
-                        final ContentMission contentMission = ContentMission.ME.getContentMission(account);
-                        if (contentMission.getInt("content_id") + 1 >= content.getInt("content_id")) {
-
-                        }
-
                     }
-                });
-
-
-                topicList.add(topic);
+                    //未过期,计算出到目前为止能解锁的主题数
+                    else {
+                        int factor = now.getYear() > orderStartTime.getYear() ? (now.getYear() - orderStartTime.getYear()) * 12 : 0;
+                        if (now.getDayOfMonth() >= orderStartTime.getDayOfMonth()) {
+                            nums[0] = factor + now.getMonthOfYear() - orderStartTime.getMonthOfYear() + 1;
+                        } else {
+                            nums[0] = factor + now.getMonthOfYear() - orderStartTime.getMonthOfYear();
+                        }
+                    }
+                    count[0] += nums[0];
+                }
 
             });
 
+            //更新主题数目
+            userTopic.set("topic_count", count[0]).save();
 
-            return Ret.create("code", HttpCode.SUCCESS);
+            //解锁新的主题
+            if (count[0] > topicCount) {
+                topic = Topic.ME.getTopicByOrder(count[0]);
+            }
+        }
+        //插入记录
+        else {
+            userTopic.saveUserTopic(account, 1);
         }
 
-
-        return Ret.create("code", HttpCode.ORDER_UPDATE_FAIL);
+        return Ret.create("code", HttpCode.SUCCESS).put("detail", topic);
     }
 
     /**
-     * 计算出用户总共几个月
-     *
-     * @param userPhone 用户手机号
-     * @return
+     * 计算订单权益结束时间
      */
-    public int userMonths(String userPhone) {
+    @Before(Tx.class)
+    private void calcOrderEndTime(String account, OrderRecord order, String orderId, String payResult) {
 
-        //计算出用户总共买了几个月
-        final int[] buyMonths = {0};
-        OrderRecord.ME.getUserOrderList(userPhone).forEach(orderRecord -> {
-            int orderType = orderRecord.getInt("type");
-            String product = orderRecord.getStr("product");
+        //取出用户离目前最近的订单
+        final OrderRecord recentOrder = OrderRecord.ME.getRecentOrder(account);
 
-            //激活码
-            if (orderType == Constant.ORDER_TYPE_ACTIVATECODE) {
-                final ActivationCode activationCode = ActivationCode.ME.getActivationCodeByCode(product);
-                if (activationCode != null) {
-                    int effectiveTime = activationCode.getInt("effective_time");
-                    buyMonths[0] += effectiveTime;
-                }
-            }
-            //大礼包
-            else {
-                GiftPack giftPack = GiftPack.ME.getGiftPackByName(product);
-                if (giftPack != null) {
-                    int effectiveTime = giftPack.getInt("effective_time");
-                    buyMonths[0] += effectiveTime;
-                }
-            }
-        });
+        //计算出主题包月结束时间
+        int type = order.getInt("type");
+        String orderProduct = order.getStr("product");
 
-        return buyMonths[0];
-    }
-//
-//    public boolean checkUserTopic(String account) {
-//        //获取所有主题
-//        OrderRecord.ME.getUserOrderList(account).forEach(orderRecord -> {
-//            DateTime recordDate = new DateTime(orderRecord.getDate("order_date"));
-//            DateTime now = DateTime.now();
-//            int defaultTopicNum = 1;
-//            int num = 0;
-//            //因子
-//            int factor = now.getYear() > recordDate.getYear() ? (now.getYear() - recordDate.getYear()) * 12 : 0;
-//            if (now.getDayOfMonth() >= recordDate.getDayOfMonth()) {
-//                num = factor + now.getMonthOfYear() - recordDate.getMonthOfYear() + defaultTopicNum;
-//            } else {
-//                num = factor + now.getMonthOfYear() - recordDate.getMonthOfYear();
-//            }
-//
-//
-//        });
-//
-//        return false;
-//    }
-
-    public static void main(String[] args) {
-
-        System.out.println(new Date(2016, 6, 3));
-
-        DateTime recordDate = new DateTime(new Date(2016, 6, 5));
-        DateTime now = DateTime.now();
-        int defaultTopicNum = 1;
-        int num = 0;
-        //因子
-        int factor = now.getYear() > recordDate.getYear() - 1900 ? (now.getYear() % (recordDate.getYear() - 1900)) * 12 : 0;
-        System.out.println(factor);
-        if (now.getDayOfMonth() >= recordDate.getDayOfMonth()) {
-            num = factor + now.getMonthOfYear() - recordDate.getMonthOfYear() + defaultTopicNum;
-            System.out.println(factor);
-        } else {
-            num = factor + now.getMonthOfYear() - recordDate.getMonthOfYear();
-            System.out.println("-" + factor);
+        //权益开始时间
+        DateTime startTime = DateTime.now();
+        DateTime giftPackTime;
+        int months = 0;
+        //大礼包
+        if (type == Constant.ORDER_TYPE_GIFT_PACK) {
+            GiftPack giftPack = GiftPack.ME.getGiftPackByName(orderProduct);
+            months = giftPack.getInt("effective_time");
+        }
+        //二维码
+        if (type == Constant.ORDER_TYPE_ACTIVATECODE) {
+            ActivationCode activationCode = ActivationCode.ME.getActivationCodeByCode(orderProduct);
+            months = activationCode.getInt("effective_time");
         }
 
-        System.out.println(num);
+        //未过期，用户就订购
+        if (recentOrder != null) {
+            final Date rencentEndTime = recentOrder.getDate("end_time");
+            //第二天开始计算
+            startTime = new DateTime(recentOrder.getDate("end_time")).plusDays(1);
+            giftPackTime = new DateTime(rencentEndTime).plusMonths(months);
+        } else {
+            giftPackTime = startTime.plusMonths(months);
+        }
+        OrderRecord.ME.updatePayResult(orderId, payResult, startTime.toDate(), giftPackTime.toDate());
     }
-
 
 }

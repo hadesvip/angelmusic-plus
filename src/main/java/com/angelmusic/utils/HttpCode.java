@@ -84,5 +84,8 @@ public interface HttpCode {
     //只支持post请求
     String HTTP_ONLY_SUPPORT_POST = "202";
 
+    //订单不存在
+    String ORDER_NOT_EXIST = "201227";
+
 
 }

@@ -2,7 +2,6 @@ package com.angelmusic.dao.model;
 
 import com.angelmusic.plugin.sql.PlusSqlKit;
 import com.jfinal.ext.plugin.tablebind.TableBind;
-import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 
 import java.util.List;
@@ -39,23 +38,15 @@ public class Topic extends Model<Topic> {
         return ME.find(PlusSqlKit.sql("topic.allTopic"));
     }
 
-    /**
-     * 获取不免费的主题个数
-     *
-     * @return
-     */
-    public int getNotFreeTopicCount() {
-        return Db.queryInt(PlusSqlKit.sql("getNotFreeTopicCount"));
-    }
 
     /**
      * 获取主题信息
      *
-     * @param topicId 主题编号
+     * @param order 主题顺序
      * @return
      */
-    public Topic getTopic(String topicId) {
-        return ME.findById(topicId);
+    public Topic getTopicByOrder(int order) {
+        return ME.findFirst(PlusSqlKit.sql("topic.getTopicByOrder"), order);
     }
 
     /**
