@@ -34,13 +34,27 @@ public class OrderService {
         //订单号
         String orderId = UUID.randomUUID().toString().replaceAll("-", "");
 
-        //成功订单成功
-        if (OrderRecord.ME.saveOrderRecord(orderId, account, money, product, type)) {
-
-            return Ret.create("code", HttpCode.SUCCESS).put("detail", OrderRecord.ME);
+        //二维码
+        if (type == Constant.ORDER_TYPE_ACTIVATECODE) {
+            Ret ret = ActivationCodeService.ME.activateCode(product);
+            if (ret != null) {
+                return ret;
+            }
+            if (OrderRecord.ME.saveOrderRecord(orderId, account, money, product, type, Constant.PAY_SUCESS)) {
+                return Ret.create("code", HttpCode.SUCCESS).put("detail", OrderRecord.ME);
+            }
         }
 
-        return Ret.create("code", HttpCode.ORDER_RECORD_CREATE_FAIL).put("detail", OrderRecord.ME);
+        //大礼包
+        if (type == Constant.ORDER_TYPE_GIFT_PACK) {
+            //成功订单成功
+            if (OrderRecord.ME.saveOrderRecord(orderId, account, money, product, type, Constant.PAY_PAYING)) {
+
+                return Ret.create("code", HttpCode.SUCCESS).put("detail", OrderRecord.ME);
+            }
+        }
+
+        return Ret.create("code", HttpCode.ORDER_RECORD_CREATE_FAIL);
     }
 
     /**
@@ -54,16 +68,35 @@ public class OrderService {
     public Ret updateOrderRecord(String orderId, String payResult, String account) {
 
         Topic topic = null;
+
         //获取订单
         final OrderRecord order = OrderRecord.ME.getOrderByOrderId(orderId);
+
         if (order == null) {
             return Ret.create("code", HttpCode.ORDER_NOT_EXIST);
         }
+        //支付成功
+        if (Integer.parseInt(payResult) == Constant.PAY_SUCESS) {
+            //更新权益结束时间
+            calcOrderEndTime(account, order, orderId, payResult);
 
-        //更新权益结束时间
-        calcOrderEndTime(account, order, orderId, payResult);
+            //用户目前解锁的主题数目
+            topic = calcUserTopicNum(account);
+        } else {
+            OrderRecord.ME.updatePayResult(orderId, payResult, null, null);
+        }
 
-        //用户目前解锁的主题数目
+
+        return Ret.create("code", HttpCode.SUCCESS).put("detail", topic);
+    }
+
+    /**
+     * 计算出用户主题数
+     *
+     * @return
+     */
+    @Before(Tx.class)
+    private Topic calcUserTopicNum(String account) {
         UserTopic userTopic = UserTopic.ME.getUserTopic(account);
         if (userTopic != null) {
             int topicCount = userTopic.getInt("topic_count");
@@ -124,7 +157,7 @@ public class OrderService {
 
             //解锁新的主题
             if (count[0] > topicCount) {
-                topic = Topic.ME.getTopicByOrder(count[0]);
+                return Topic.ME.getTopicByOrder(count[0]);
             }
         }
         //插入记录
@@ -132,7 +165,7 @@ public class OrderService {
             userTopic.saveUserTopic(account, 1);
         }
 
-        return Ret.create("code", HttpCode.SUCCESS).put("detail", topic);
+        return null;
     }
 
     /**

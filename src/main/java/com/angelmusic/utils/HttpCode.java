@@ -49,19 +49,12 @@ public interface HttpCode {
 
     //激活码已经激活过了
     String ACTIVATION_CODE_ACTIVATED = "201219";
-    String ACTIVATION_CODE_ACTIVATED_WORD = "激活码已经激活过了";
 
     //激活码不存在
     String ACTIVATION_CODE_NOT_EXISTS = "201220";
-    String ACTIVATION_CODE_NOT_EXISTS_WORD = "激活码不存在";
-
-    String ACTIVATION_CODE_ACTIVATED_OK = "激活码激活成功";
 
     //账户为空
     String USER_ACCOUNT_EMPTY = "201221";
-
-    //主题加载成功
-    String TOPICS_LOAD_SUCCESS_WORD = "主题加载成功";
 
     //订单生成失败
     String ORDER_RECORD_CREATE_FAIL = "201224";
@@ -77,9 +70,6 @@ public interface HttpCode {
 
     //订单更新失败
     String ORDER_UPDATE_FAIL = "201226";
-
-    //主题编号和用户编号不能为空
-    String TOPIC_USER_EMPTY_WORD = "主题编号和用户手机号不能为空";
 
     //只支持post请求
     String HTTP_ONLY_SUPPORT_POST = "202";

@@ -26,11 +26,11 @@ public class OrderController extends BaseController {
     public void createOrderRecord() {
         LOGGER.info("[invoke createOrderRecord]");
 
-//        String method = getRequest().getMethod();
-//        if (method.equalsIgnoreCase("get")) {
-//            renderJson(Ret.create("code", HttpCode.HTTP_ONLY_SUPPORT_POST).getData());
-//            return;
-//        }
+        String method = getRequest().getMethod();
+        if (method.equalsIgnoreCase("get")) {
+            renderJson(Ret.create("code", HttpCode.HTTP_ONLY_SUPPORT_POST).getData());
+            return;
+        }
 
         String account = getPara("account");
         String money = getPara("money");

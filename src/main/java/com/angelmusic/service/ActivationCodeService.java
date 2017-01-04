@@ -3,8 +3,8 @@ package com.angelmusic.service;
 import com.angelmusic.dao.model.ActivationCode;
 import com.angelmusic.utils.Constant;
 import com.angelmusic.utils.HttpCode;
-import com.angelmusic.utils.HttpResult;
 import com.jfinal.aop.Before;
+import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.tx.Tx;
 
 /**
@@ -13,7 +13,7 @@ import com.jfinal.plugin.activerecord.tx.Tx;
  */
 public class ActivationCodeService {
 
-    public static final ActivationCodeService ACTIVATIONCODESERVICE = new ActivationCodeService();
+    public static final ActivationCodeService ME = new ActivationCodeService();
 
     /**
      * 激活码激活
@@ -22,27 +22,23 @@ public class ActivationCodeService {
      * @return
      */
     @Before(Tx.class)
-    public HttpResult activateCode(String code) {
+    public Ret activateCode(String code) {
 
         //获取激活码信息
         final ActivationCode activationCodeInfo = ActivationCode.ME.getActivationCodeByCode(code);
 
         //激活码不存在
         if (activationCodeInfo == null) {
-            return new HttpResult(HttpCode.ACTIVATION_CODE_NOT_EXISTS, HttpCode.ACTIVATION_CODE_NOT_EXISTS_WORD);
+            return Ret.create("code", HttpCode.ACTIVATION_CODE_NOT_EXISTS);
         }
         //激活码已经激活过
         if (activationCodeInfo.getInt("status") == Constant.ACTIVATION_CODE_ACTIVATED) {
-            return new HttpResult(HttpCode.ACTIVATION_CODE_ACTIVATED, HttpCode.ACTIVATION_CODE_ACTIVATED_WORD);
+            return Ret.create("code", HttpCode.ACTIVATION_CODE_ACTIVATED);
         }
 
-        //更改激活码状态为已激活
-        boolean activateResult = ActivationCode.ME.updateActivationCodeStatus(code);
-
-        //激活成功
-        if (activateResult) {
-            return new HttpResult(HttpCode.SUCCESS, HttpCode.ACTIVATION_CODE_ACTIVATED_OK);
-        }
-        return new HttpResult(HttpCode.FAIL, HttpCode.FAIL_WORD);
+        //激活
+        ActivationCode.ME.updateActivationCodeStatus(code);
+        
+        return null;
     }
 }

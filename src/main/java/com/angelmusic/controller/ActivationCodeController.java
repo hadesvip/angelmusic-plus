@@ -37,7 +37,7 @@ public class ActivationCodeController extends BaseController {
         }
 
         //激活码激活
-        renderJson(ActivationCodeService.ACTIVATIONCODESERVICE.activateCode(activationCode));
+        renderJson(ActivationCodeService.ME.activateCode(activationCode));
 
         LOGGER.info("[leave activationCode method]");
     }

@@ -1,22 +1,17 @@
 package com.angelmusic.service;
 
-import com.alibaba.druid.support.json.JSONUtils;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.angelmusic.dao.model.*;
-import com.angelmusic.utils.Constant;
-import com.angelmusic.utils.DateUtils;
+import com.angelmusic.dao.model.Content;
+import com.angelmusic.dao.model.ContentMission;
+import com.angelmusic.dao.model.GiftPack;
+import com.angelmusic.dao.model.Topic;
 import com.angelmusic.utils.HttpCode;
-import com.angelmusic.utils.HttpResult;
-import com.jfinal.json.FastJson;
-import com.jfinal.json.Json;
 import com.jfinal.kit.Ret;
-import com.jfinal.kit.StrKit;
 import org.apache.commons.collections.CollectionUtils;
-import org.joda.time.DateTime;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 主题服务

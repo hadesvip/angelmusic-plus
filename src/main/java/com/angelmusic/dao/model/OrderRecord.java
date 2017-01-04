@@ -1,7 +1,6 @@
 package com.angelmusic.dao.model;
 
 import com.angelmusic.plugin.sql.PlusSqlKit;
-import com.angelmusic.utils.Constant;
 import com.jfinal.ext.plugin.tablebind.TableBind;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
@@ -56,7 +55,7 @@ public class OrderRecord extends Model<OrderRecord> {
      * @param product 产品
      * @param type    订单类型
      */
-    public boolean saveOrderRecord(String orderId, String account, String money, String product, int type) {
+    public boolean saveOrderRecord(String orderId, String account, String money, String product, int type, int payResult) {
         return
                 ME
                         .set("order_id", orderId)
@@ -65,7 +64,7 @@ public class OrderRecord extends Model<OrderRecord> {
                         .set("product", product)
                         .set("order_date", new Date())
                         .set("type", type)
-                        .set("pay_result", Constant.PAY_PAYING)
+                        .set("pay_result", payResult)
                         .save();
     }
 

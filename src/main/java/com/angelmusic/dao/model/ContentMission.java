@@ -31,17 +31,6 @@ public class ContentMission extends Model<ContentMission> {
         return ME.findFirst(PlusSqlKit.sql("contentMission.getContentMissionByAccount"), account);
     }
 
-
-    /**
-     * 获取上一个内容关卡
-     *
-     * @return
-     */
-    public ContentMission getPrevMission(String account, int topicId, int order) {
-        return ME.findFirst("contentMission.getPrevContentMission", account, topicId, order);
-    }
-
-
     /**
      * 保存内容关卡
      *
