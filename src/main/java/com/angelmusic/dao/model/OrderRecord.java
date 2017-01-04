@@ -38,6 +38,16 @@ public class OrderRecord extends Model<OrderRecord> {
         return ME.find(PlusSqlKit.sql("order.getOrderList"), account);
     }
 
+    /**
+     *
+     * @param account
+     * @return
+     */
+    public OrderRecord getUserOrder(String account) {
+        return ME.findFirst(PlusSqlKit.sql("order.getUserOrder"), account);
+    }
+
+
 
     /**
      * 保存订单

@@ -43,6 +43,7 @@
     <!--大礼包-->
     <sqlGroup name="giftPack">
         <sql id="getGiftPackByName">select * from am_gift_pack where gift_pack_name=?</sql>
+        <sql id="getGiftPack">select * from am_gift_pack</sql>
     </sqlGroup>
 
     <!--内容-->

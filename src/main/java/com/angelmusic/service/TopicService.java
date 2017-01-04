@@ -4,10 +4,9 @@ import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.angelmusic.dao.model.Content;
-import com.angelmusic.dao.model.ContentMission;
-import com.angelmusic.dao.model.Topic;
+import com.angelmusic.dao.model.*;
 import com.angelmusic.utils.Constant;
+import com.angelmusic.utils.DateUtils;
 import com.angelmusic.utils.HttpCode;
 import com.angelmusic.utils.HttpResult;
 import com.jfinal.json.FastJson;
@@ -40,12 +39,14 @@ public class TopicService {
             return ret;
         }
 
+        Map<String,Object> returnMap = new HashMap<>();
         //处理结果
         List<Topic> tList = new ArrayList<>();
         //遍历当前主题
         for (int i = 0; i < topics.size(); i++) {
             //此处是试看主题的逻辑
             if (userThemeCount == 0) {
+                //约定第一个为试看主题（呵呵）
                 Topic freeTopic = topics.get(0);
                 //取得这个主题的内容
                 Integer topic_id = freeTopic.getInt("topic_id");
@@ -67,48 +68,51 @@ public class TopicService {
                     }
                     tList.add(freeTopic);
                 }
-                ret.put("detail", tList);
-                return ret;
-            }
+            } else {
+                //此处是对于已经购买过的用户的主题逻辑
+                //判断当前主题+1是不是大于用户解锁主题  用于跳出循环
+                if (i + 1 > userThemeCount) {
+                    break;
+                }
 
-            //此处是对于已经购买过的用户的主题逻辑
-            //判断当前主题+1是不是大于用户解锁主题  用于跳出循环
-            if (i + 1 > userThemeCount) {
-                break;
-            }
+                //获取主题
+                Topic t = topics.get(i);
+                //获取该主题下的所有内容
+                List<Content> contents = Content.ME.getTopicContentList(t.getInt("topic_id"));
+                //获取用户游戏通关主题
+                ContentMission mission = ContentMission.ME.getContentMissionByAccount(account);
 
-            //获取主题
-            Topic t = topics.get(i);
-            //获取该主题下的所有内容
-            List<Content> contents = Content.ME.getTopicContentList(t.getInt("topic_id"));
-            //获取用户游戏通关主题
-            ContentMission mission = ContentMission.ME.getContentMissionByAccount(account);
-
-            //放入符合条件的contentList
-            List<Content> cList = new ArrayList<>();
-            if (CollectionUtils.isNotEmpty(contents)) {//不为空  执行下面逻辑
-                for (int j =0; j < contents.size(); j++){
-                    Content c = contents.get(j);
-                    //判断内容下的游戏是不是通关
-                    if (2 == c.getInt("content_free")) {//试看的内容 不用处理直接放
-                        cList.add(c);
-                    } else {
-                        if (c.getInt("content_id") > mission.getInt("content_id")) {
-                            break;
+                //放入符合条件的contentList
+                List<Content> cList = new ArrayList<>();
+                if (CollectionUtils.isNotEmpty(contents)) {//不为空  执行下面逻辑
+                    for (int j = 0; j < contents.size(); j++) {
+                        Content c = contents.get(j);
+                        //判断内容下的游戏是不是通关
+                        if (2 == c.getInt("content_free")) {//试看的内容 不用处理直接放
+                            cList.add(c);
+                        } else {
+                            if (c.getInt("content_id") - 1 > mission.getInt("content_id")) {
+                                break;
+                            }
+                            cList.add(c);
                         }
-                        cList.add(c);
                     }
                 }
-            }
-            //主题存入最后符合条件的内容list
-            if (cList.size() > 0) {
-                t.setContentList(cList);
-            }
+                //主题存入最后符合条件的内容list
+                if (cList.size() > 0) {
+                    t.setContentList(cList);
+                }
 
-            //主题加入要返回的list
-            tList.add(t);
+                //主题加入要返回的list
+                tList.add(t);
+            }
         }
-        ret.put("detail", tList);
+        returnMap.put("topicList",tList);
+        //查询大礼包
+        List<GiftPack> giftPackList = GiftPack.ME.getAllGiftPack();
+        returnMap.put("giftPackList",giftPackList);
+
+        ret.put("detail", returnMap);
         return ret;
     }
 

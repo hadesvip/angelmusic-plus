@@ -4,6 +4,8 @@ import com.angelmusic.plugin.sql.PlusSqlKit;
 import com.jfinal.ext.plugin.tablebind.TableBind;
 import com.jfinal.plugin.activerecord.Model;
 
+import java.util.List;
+
 /**
  * 大礼包
  * Created by wangyong on 16-12-21.
@@ -21,5 +23,9 @@ public class GiftPack extends Model<GiftPack> {
      */
     public GiftPack getGiftPackByName(String name) {
         return ME.findFirst(PlusSqlKit.sql("giftPack.getGiftPackByName"), name);
+    }
+
+    public List<GiftPack> getAllGiftPack(){
+        return ME.find(PlusSqlKit.sql("giftPack.getGiftPack"));
     }
 }
