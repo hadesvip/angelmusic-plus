@@ -49,14 +49,4 @@ public class Topic extends Model<Topic> {
         return ME.findFirst(PlusSqlKit.sql("topic.getTopicByOrder"), order);
     }
 
-    /**
-     * 获取试看和收费的主题列表
-     *
-     * @return
-     */
-    public List<Topic> getTopicList() {
-        return find(PlusSqlKit.sql("topic.getToppicList"));
-    }
-
-
 }

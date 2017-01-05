@@ -9,6 +9,7 @@ import com.jfinal.plugin.activerecord.tx.Tx;
 import org.joda.time.DateTime;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -114,7 +115,7 @@ public class OrderService {
 
                         //大礼包
                         if (orderType == Constant.ORDER_TYPE_GIFT_PACK) {
-                            GiftPack giftPack = GiftPack.ME.getGiftPackByName(product);
+                            GiftPack giftPack = GiftPack.ME.getGiftPackById(product);
                             int months = giftPack.getInt("effective_time");
                             nums[0] = months;
                         }
@@ -140,16 +141,24 @@ public class OrderService {
             });
 
             //更新主题数目
-            userTopic.set("topic_count", count[0]).save();
+            UserTopic.ME.updateUserTopic(count[0], userTopic.getInt("id"));
+
 
             //解锁新的主题
             if (count[0] > topicCount) {
-                return Topic.ME.getTopicByOrder(count[0]);
+                Topic topic = Topic.ME.getTopicByOrder(count[0]);
+                final List<Content> contentList = Content.ME.getTopicContentList(topic.getInt("topic_id"));
+                topic.setContentList(contentList);
+                return topic;
             }
         }
         //插入记录
         else {
-            userTopic.saveUserTopic(account, 1);
+            UserTopic.ME.saveUserTopic(account, 1);
+            Topic topic = Topic.ME.getTopicByOrder(1);
+            final List<Content> contentList = Content.ME.getTopicContentList(topic.getInt("topic_id"));
+            topic.setContentList(contentList);
+            return topic;
         }
 
         return null;
@@ -171,7 +180,7 @@ public class OrderService {
 
         //大礼包
         if (type == Constant.ORDER_TYPE_GIFT_PACK) {
-            GiftPack giftPack = GiftPack.ME.getGiftPackByName(orderProduct);
+            GiftPack giftPack = GiftPack.ME.getGiftPackById(orderProduct);
             months = giftPack.getInt("effective_time");
         }
         //二维码
@@ -185,7 +194,7 @@ public class OrderService {
             final Date rencentEndTime = recentOrder.getDate("end_time");
             //第二天开始计算
             startTime = new DateTime(recentOrder.getDate("end_time")).plusDays(1);
-            endTime = new DateTime(rencentEndTime).plusMonths(months);
+            endTime = new DateTime(rencentEndTime).plusMonths(months).plusDays(1);
         } else {
             endTime = startTime.plusMonths(months);
         }

@@ -25,7 +25,17 @@ public class GiftPack extends Model<GiftPack> {
         return ME.findFirst(PlusSqlKit.sql("giftPack.getGiftPackByName"), name);
     }
 
-    public List<GiftPack> getAllGiftPack(){
+    public List<GiftPack> getAllGiftPack() {
         return ME.find(PlusSqlKit.sql("giftPack.getGiftPack"));
+    }
+
+    /**
+     * 根据主键获取大礼包
+     *
+     * @param id
+     * @return
+     */
+    public GiftPack getGiftPackById(String id) {
+        return findById(id);
     }
 }

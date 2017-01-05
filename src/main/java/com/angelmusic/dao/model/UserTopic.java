@@ -1,6 +1,7 @@
 package com.angelmusic.dao.model;
 
 import com.angelmusic.plugin.sql.PlusSqlKit;
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 
 /**
@@ -30,6 +31,15 @@ public class UserTopic extends Model<UserTopic> {
                         .set("account", account)
                         .set("topic_count", topicCount)
                         .save();
+    }
+
+
+    /**
+     * 更新用户主题数
+     */
+    public boolean updateUserTopic(int id, int topicCount) {
+        return
+                Db.update(PlusSqlKit.sql("userTopic.updateUserTopic"), topicCount, id) > 1;
     }
 
 }

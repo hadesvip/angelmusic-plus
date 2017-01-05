@@ -54,10 +54,10 @@ create table am_order_record(
   account varchar(32) not null comment '用户账号',
   money decimal(5,2) not null comment '本次充值金额',
   order_date DATETIME not null default now() comment '消费时间',
-  start_time DATETIME  default now() comment '权益开始时间',
-  end_time DATETIME  comment '权益结束时间',
+  start_time DATETIME  default '' comment '权益开始时间',
+  end_time DATETIME  default ''  comment '权益结束时间',
   `type` int not null comment  '支付类型:激活码1，大礼包2',
-  product int not null comment '激活码或者大礼包编号',
+  product VARCHAR(64) not null comment '激活码或者大礼包编号',
   pay_result int not null comment '支付结果1成功2失败3支付中',
   key order_record_index(account)
 )engine =innodb default charset =utf8 comment '订单记录';

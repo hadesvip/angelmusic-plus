@@ -64,12 +64,6 @@ public interface HttpCode {
     //订单金额不可以小于0
     String ORDER_RECORD_MONEY_LESS_ZERO = "201228";
 
-    //订单类型只能是激活码和大礼包
-    String ORDER_TYPE_OVER = "201229";
-
-    //订单更新失败
-    String ORDER_UPDATE_FAIL = "201226";
-
     //只支持post请求
     String HTTP_ONLY_SUPPORT_POST = "202";
 

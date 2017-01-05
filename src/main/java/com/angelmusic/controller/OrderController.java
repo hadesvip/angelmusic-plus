@@ -27,11 +27,11 @@ public class OrderController extends BaseController {
         LOGGER.info("[invoke createOrderRecord]");
 
         //只支持POST请求
-        String method = getRequest().getMethod();
+     /*   String method = getRequest().getMethod();
         if (method.equalsIgnoreCase("get")) {
             renderJson(Ret.create("code", HttpCode.HTTP_ONLY_SUPPORT_POST).getData());
             return;
-        }
+        }*/
 
         String account = getPara("account");
         String money = getPara("money");
@@ -40,7 +40,7 @@ public class OrderController extends BaseController {
 
         //参数校验
         if (StrKit.isBlank(account) || StrKit.isBlank(money) || StrKit.isBlank(product)) {
-            Ret.create("code", HttpCode.PARAMS_INVAILD);
+            renderJson(Ret.create("code", HttpCode.PARAMS_INVAILD).getData());
             return;
         }
 
@@ -63,11 +63,11 @@ public class OrderController extends BaseController {
     public void updateOrderPayResult() {
         LOGGER.info("[invoke updateOrderPayResult]");
 
-        String method = getRequest().getMethod();
+       /* String method = getRequest().getMethod();
         if (method.equalsIgnoreCase("get")) {
             renderJson(Ret.create("code", HttpCode.HTTP_ONLY_SUPPORT_POST).getData());
             return;
-        }
+        }*/
 
         String orderId = getPara("orderId");
         String payResult = getPara("payResult");

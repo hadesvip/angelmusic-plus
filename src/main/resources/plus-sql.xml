@@ -21,6 +21,7 @@
     <!--用户主题信息-->
     <sqlGroup name="userTopic">
         <sql id="getUserTopic">select * from am_user_topic where account=? limit 1</sql>
+        <sql id="updateUserTopic">update am_user_topic set topic_count=? where id =?</sql>
     </sqlGroup>
 
     <!--主题信息-->
@@ -33,18 +34,10 @@
             SELECT
             t.topic_id,
             t.name,
-            t.free topic_free,
-            c.content_id,
-            c.name content_name,
-            c.free content_free,
-            c.course_name,
-            c.course_video_path,
-            c.game_name
+            t.free
             FROM
             am_topic t
-            LEFT JOIN
-            am_content c ON t.topic_id = c.topic_id
-            WHERE t.order = ?
+            WHERE t.`order` = ?
         </sql>
     </sqlGroup>
 

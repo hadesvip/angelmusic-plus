@@ -18,16 +18,6 @@ public class OrderRecord extends Model<OrderRecord> {
     public static final OrderRecord ME = new OrderRecord();
 
     /**
-     * 根据用户编号获取订单记录数
-     *
-     * @param userPhone 用户手机号
-     * @return
-     */
-    public int getOrderCountByUserId(String userPhone) {
-        return Db.queryInt(PlusSqlKit.sql("order.getOrderCountByUserId"), userPhone);
-    }
-
-    /**
      * 获取用户订单记录
      *
      * @param account 用户账号
@@ -36,15 +26,6 @@ public class OrderRecord extends Model<OrderRecord> {
     public List<OrderRecord> getUserOrderList(String account) {
         return ME.find(PlusSqlKit.sql("order.getOrderList"), account);
     }
-
-    /**
-     * @param account
-     * @return
-     */
-    public OrderRecord getUserOrder(String account) {
-        return ME.findFirst(PlusSqlKit.sql("order.getUserOrder"), account);
-    }
-
 
     /**
      * 保存订单
@@ -56,6 +37,7 @@ public class OrderRecord extends Model<OrderRecord> {
      * @param type    订单类型
      */
     public boolean saveOrderRecord(String orderId, String account, String money, String product, int type, int payResult) {
+
         return
                 ME
                         .set("order_id", orderId)
