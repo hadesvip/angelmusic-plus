@@ -25,11 +25,11 @@ public class ActivationCodeController extends BaseController {
     public void activate() {
         LOGGER.info("[invoke activationCode method ]");
 
-        String method = getRequest().getMethod();
+     /*   String method = getRequest().getMethod();
         if (method.equalsIgnoreCase("get")) {
             renderJson(Ret.create("code", HttpCode.HTTP_ONLY_SUPPORT_POST).getData());
             return;
-        }
+        }*/
 
         final String activationCode = getPara("activationCode");
         final String account = getPara("account");

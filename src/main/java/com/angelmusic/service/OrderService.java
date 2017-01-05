@@ -183,7 +183,7 @@ public class OrderService {
             GiftPack giftPack = GiftPack.ME.getGiftPackById(orderProduct);
             months = giftPack.getInt("effective_time");
         }
-        //二维码
+        //激活码
         if (type == Constant.ORDER_TYPE_ACTIVATECODE) {
             ActivationCode activationCode = ActivationCode.ME.getActivationCodeByCode(orderProduct);
             months = activationCode.getInt("effective_time");

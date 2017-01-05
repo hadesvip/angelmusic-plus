@@ -26,7 +26,7 @@ public class ActivationCode extends Model<ActivationCode> {
      * 更新激活码状态已激活
      */
     public boolean updateActivationCodeStatus(String code) {
-        return Db.update(PlusSqlKit.sql("activationCode.updateActivationCodeStatus"), code.trim(), Constant.ACTIVATION_CODE_ACTIVATED) > 0;
+        return Db.update(PlusSqlKit.sql("activationCode.updateActivationCodeStatus"), Constant.ACTIVATION_CODE_ACTIVATED, code.trim()) > 0;
     }
 
 

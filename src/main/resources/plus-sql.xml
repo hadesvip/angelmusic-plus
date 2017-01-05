@@ -14,7 +14,7 @@
 
     <!--激活码-->
     <sqlGroup name="activationCode">
-        <sql id="getActivationCodeByCode">select id,code,status from am_activation_code where code =?</sql>
+        <sql id="getActivationCodeByCode">select id,code,status,effective_time from am_activation_code where code =?</sql>
         <sql id="updateActivationCodeStatus">update am_activation_code set status=? where code=?</sql>
     </sqlGroup>
 
