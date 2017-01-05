@@ -1,9 +1,6 @@
 package com.angelmusic.service;
 
-import com.angelmusic.dao.model.Content;
-import com.angelmusic.dao.model.ContentMission;
-import com.angelmusic.dao.model.GiftPack;
-import com.angelmusic.dao.model.Topic;
+import com.angelmusic.dao.model.*;
 import com.angelmusic.utils.HttpCode;
 import com.jfinal.kit.Ret;
 import org.apache.commons.collections.CollectionUtils;
@@ -26,7 +23,11 @@ public class TopicService {
         Ret ret = Ret.create("code", HttpCode.SUCCESS).put("detail", "");
 
         //先查询用户解锁到第几个主题
+        UserTopic ut = UserTopic.ME.getUserTopic(account);
         int userThemeCount = 0;
+        if (ut != null) {
+            userThemeCount = ut.getInt("topic_count");
+        }
 
         //查询有哪些主题
         List<Topic> topics = Topic.ME.topics();
@@ -34,9 +35,14 @@ public class TopicService {
             return ret;
         }
 
-        Map<String,Object> returnMap = new HashMap<>();
+        Map<String, Object> returnMap = new HashMap<>();
         //处理结果
         List<Topic> tList = new ArrayList<>();
+        Map<Integer, List<Content>> contentMap = getAllContent(topics, userThemeCount);
+
+        //获取用户游戏通关主题
+        ContentMission mission = ContentMission.ME.getContentMissionByAccount(account);
+
         //遍历当前主题
         for (int i = 0; i < topics.size(); i++) {
             //此处是试看主题的逻辑
@@ -73,9 +79,8 @@ public class TopicService {
                 //获取主题
                 Topic t = topics.get(i);
                 //获取该主题下的所有内容
-                List<Content> contents = Content.ME.getTopicContentList(t.getInt("topic_id"));
-                //获取用户游戏通关主题
-                ContentMission mission = ContentMission.ME.getContentMissionByAccount(account);
+                //List<Content> contents = Content.ME.getTopicContentList(t.getInt("topic_id"));
+                List<Content> contents = contentMap.get(t.getInt("topic_id"));
 
                 //放入符合条件的contentList
                 List<Content> cList = new ArrayList<>();
@@ -86,7 +91,7 @@ public class TopicService {
                         if (2 == c.getInt("content_free")) {//试看的内容 不用处理直接放
                             cList.add(c);
                         } else {
-                            if (c.getInt("content_id") - 1 > mission.getInt("content_id")) {
+                            if (mission == null ||c.getInt("content_id") - 1 > mission.getInt("content_id")) {
                                 break;
                             }
                             cList.add(c);
@@ -102,12 +107,43 @@ public class TopicService {
                 tList.add(t);
             }
         }
-        returnMap.put("topicList",tList);
+        returnMap.put("topicList", tList);
         //查询大礼包
         List<GiftPack> giftPackList = GiftPack.ME.getAllGiftPack();
-        returnMap.put("giftPackList",giftPackList);
+        returnMap.put("giftPackList", giftPackList);
 
         ret.put("detail", returnMap);
         return ret;
+    }
+
+    private Map<Integer,List<Content>> getAllContent(List<Topic> tList,int count){
+        Map<Integer,List<Content>> map = new HashMap<>();
+        List<Integer> sb = new ArrayList<>();
+        for (int i =0; i< tList.size(); i++){
+            if(i + 1 >= count){
+                break;
+            }
+            Topic t = tList.get(i);
+            sb.add(t.getInt("topic_id"));
+        }
+        if(sb.size() > 0){
+            Integer[] array = new Integer[sb.size()];
+            sb.toArray(array);
+            List<Content> cList = Content.ME.getAllContentByTids(array);
+            if(CollectionUtils.isNotEmpty(cList)){
+                for (Content c : cList){
+                    //取topic_id
+                    Integer topicId = c.getInt("topic_id");
+                    //看map是不是存在List
+                    List<Content> tcList = map.get(topicId);
+                    if(tcList == null){ //不为null证明存在  直接放
+                        tcList = new ArrayList<>();
+                    }
+                    tcList.add(c);
+                    map.put(topicId,tcList);
+                }
+            }
+        }
+        return map;
     }
 }
