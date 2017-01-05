@@ -25,23 +25,20 @@ public class OrderService {
      * @param account 用户账号
      * @param money   消费金额
      * @param product 产品
-     * @param type    支付类型
      * @return
      */
     @Before(Tx.class)
-    public Ret createOrderRecord(String account, String money, String product, int type) {
+    public Ret createOrderRecord(String account, String money, String product) {
 
         //订单号
         String orderId = UUID.randomUUID().toString().replaceAll("-", "");
 
-        //大礼包
-        if (type == Constant.ORDER_TYPE_GIFT_PACK) {
-            //成功订单成功
-            if (OrderRecord.ME.saveOrderRecord(orderId, account, money, product, type, Constant.PAY_PAYING)) {
+        //成功订单成功
+        if (OrderRecord.ME.saveOrderRecord(orderId, account, money, product, Constant.ORDER_TYPE_GIFT_PACK, Constant.PAY_PAYING)) {
 
-                return Ret.create("code", HttpCode.SUCCESS).put("detail", OrderRecord.ME);
-            }
+            return Ret.create("code", HttpCode.SUCCESS).put("detail", OrderRecord.ME);
         }
+
 
         return Ret.create("code", HttpCode.ORDER_RECORD_CREATE_FAIL);
     }

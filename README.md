@@ -15,3 +15,5 @@
 
 ### 项目技术选型
 1. jfinal+freemarker
+
+### jfinal以后建议还要不要用，很多地方有bug，官方维护很慢，以后开发还是随着主流选用springmvc+mybaits

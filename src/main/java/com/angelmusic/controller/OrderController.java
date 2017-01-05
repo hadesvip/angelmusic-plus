@@ -26,6 +26,7 @@ public class OrderController extends BaseController {
     public void createOrderRecord() {
         LOGGER.info("[invoke createOrderRecord]");
 
+        //只支持POST请求
         String method = getRequest().getMethod();
         if (method.equalsIgnoreCase("get")) {
             renderJson(Ret.create("code", HttpCode.HTTP_ONLY_SUPPORT_POST).getData());
@@ -34,14 +35,11 @@ public class OrderController extends BaseController {
 
         String account = getPara("account");
         String money = getPara("money");
-
-        // 产品:二维码编号，或者大礼包
+        // 大礼包编号
         String product = getPara("product");
-        //支付类型
-        int type = getParaToInt("type");
 
         //参数校验
-        if (StrKit.isBlank(account) || StrKit.isBlank(money) || StrKit.isBlank(product) || type <= 0) {
+        if (StrKit.isBlank(account) || StrKit.isBlank(money) || StrKit.isBlank(product)) {
             Ret.create("code", HttpCode.PARAMS_INVAILD);
             return;
         }
@@ -52,14 +50,8 @@ public class OrderController extends BaseController {
             return;
         }
 
-        //支付类型
-        if (type < Constant.ORDER_TYPE_ACTIVATECODE || type > Constant.ORDER_TYPE_GIFT_PACK) {
-            renderJson(Ret.create("code", HttpCode.ORDER_TYPE_OVER).getData());
-            return;
-        }
-
         //创建订单
-        renderJson(OrderService.ME.createOrderRecord(account, money, product, type).getData());
+        renderJson(OrderService.ME.createOrderRecord(account, money, product).getData());
 
         LOGGER.info("[leave createOrderRecord]");
     }
