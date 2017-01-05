@@ -45,7 +45,6 @@ public interface HttpCode {
 
     //激活码参数为空
     String ACTIVATION_CODE_EMPTY = "201218";
-    String ACTIVATION_CODE_EMPTY_WORD = "激活码参数为空";
 
     //激活码已经激活过了
     String ACTIVATION_CODE_ACTIVATED = "201219";

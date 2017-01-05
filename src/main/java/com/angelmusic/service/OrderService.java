@@ -34,17 +34,6 @@ public class OrderService {
         //订单号
         String orderId = UUID.randomUUID().toString().replaceAll("-", "");
 
-        //二维码
-        if (type == Constant.ORDER_TYPE_ACTIVATECODE) {
-            Ret ret = ActivationCodeService.ME.activateCode(product);
-            if (ret != null) {
-                return ret;
-            }
-            if (OrderRecord.ME.saveOrderRecord(orderId, account, money, product, type, Constant.PAY_SUCESS)) {
-                return Ret.create("code", HttpCode.SUCCESS).put("detail", OrderRecord.ME);
-            }
-        }
-
         //大礼包
         if (type == Constant.ORDER_TYPE_GIFT_PACK) {
             //成功订单成功
@@ -68,7 +57,6 @@ public class OrderService {
     public Ret updateOrderRecord(String orderId, String payResult, String account) {
 
         Topic topic = null;
-
         //获取订单
         final OrderRecord order = OrderRecord.ME.getOrderByOrderId(orderId);
 
@@ -77,15 +65,17 @@ public class OrderService {
         }
         //支付成功
         if (Integer.parseInt(payResult) == Constant.PAY_SUCESS) {
+            int type = order.getInt("type");
+            String orderProduct = order.getStr("product");
+
             //更新权益结束时间
-            calcOrderEndTime(account, order, orderId, payResult);
+            calcOrderStartEndTime(account, type, orderProduct, orderId, Integer.parseInt(payResult));
 
             //用户目前解锁的主题数目
             topic = calcUserTopicNum(account);
         } else {
-            OrderRecord.ME.updatePayResult(orderId, payResult, null, null);
+            OrderRecord.ME.updatePayResult(orderId, Integer.parseInt(payResult), null, null);
         }
-
 
         return Ret.create("code", HttpCode.SUCCESS).put("detail", topic);
     }
@@ -96,7 +86,7 @@ public class OrderService {
      * @return
      */
     @Before(Tx.class)
-    private Topic calcUserTopicNum(String account) {
+    public static Topic calcUserTopicNum(String account) {
         UserTopic userTopic = UserTopic.ME.getUserTopic(account);
         if (userTopic != null) {
             int topicCount = userTopic.getInt("topic_count");
@@ -172,19 +162,16 @@ public class OrderService {
      * 计算订单权益结束时间
      */
     @Before(Tx.class)
-    private void calcOrderEndTime(String account, OrderRecord order, String orderId, String payResult) {
+    public static void calcOrderStartEndTime(String account, int type, String orderProduct, String orderId, int payResult) {
 
         //取出用户离目前最近的订单
         final OrderRecord recentOrder = OrderRecord.ME.getRecentOrder(account);
 
-        //计算出主题包月结束时间
-        int type = order.getInt("type");
-        String orderProduct = order.getStr("product");
-
         //权益开始时间
         DateTime startTime = DateTime.now();
-        DateTime giftPackTime;
+        DateTime endTime;
         int months = 0;
+
         //大礼包
         if (type == Constant.ORDER_TYPE_GIFT_PACK) {
             GiftPack giftPack = GiftPack.ME.getGiftPackByName(orderProduct);
@@ -201,11 +188,12 @@ public class OrderService {
             final Date rencentEndTime = recentOrder.getDate("end_time");
             //第二天开始计算
             startTime = new DateTime(recentOrder.getDate("end_time")).plusDays(1);
-            giftPackTime = new DateTime(rencentEndTime).plusMonths(months);
+            endTime = new DateTime(rencentEndTime).plusMonths(months);
         } else {
-            giftPackTime = startTime.plusMonths(months);
+            endTime = startTime.plusMonths(months);
         }
-        OrderRecord.ME.updatePayResult(orderId, payResult, startTime.toDate(), giftPackTime.toDate());
+
+        OrderRecord.ME.updatePayResult(orderId, payResult, startTime.toDate(), endTime.toDate());
     }
 
 }

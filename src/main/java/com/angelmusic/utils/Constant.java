@@ -24,15 +24,6 @@ public interface Constant {
     //订单类型:大礼包
     int ORDER_TYPE_GIFT_PACK = 2;
 
-    //收费
-    int UNFREE = 1;
-
-    //试看
-    int PARTS_FREE = 3;
-
-    //内容免费
-    int CONTENT_FREE = 2;
-
     //支付成功
     int PAY_SUCESS = 1;
 
@@ -47,14 +38,5 @@ public interface Constant {
 
     //关卡完成
     int MISSION_COMPLETE = 2;
-
-    //关卡未完成
-    int MISSION_UNCOMPLETE = 1;
-
-    //游戏任务
-    int MISSION_GAME = 1;
-
-    //课程任务
-    int MISSION_COURSE = 2;
 
 }

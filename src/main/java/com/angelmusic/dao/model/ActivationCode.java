@@ -2,10 +2,8 @@ package com.angelmusic.dao.model;
 
 import com.angelmusic.plugin.sql.PlusSqlKit;
 import com.angelmusic.utils.Constant;
-import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
-import com.jfinal.plugin.activerecord.tx.Tx;
 
 /**
  * 激活码

@@ -18,28 +18,6 @@ public class Content extends Model<Content> {
     public static final Content ME = new Content();
 
     /**
-     * 是否锁住
-     */
-    public int lock = Constant.LOCKED;
-
-    public int getLock() {
-        return lock;
-    }
-
-    public int setLock(int lock) {
-        this.lock = lock;
-        return this.lock;
-    }
-
-    @Override
-    protected Map<String, Object> getAttrs() {
-        Map<String, Object> attrs = super.getAttrs();
-        attrs.put("lock", lock);
-
-        return attrs;
-    }
-
-    /**
      * 获取上一个content
      *
      * @return

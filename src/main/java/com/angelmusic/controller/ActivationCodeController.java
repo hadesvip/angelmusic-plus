@@ -4,6 +4,7 @@ import com.angelmusic.base.BaseController;
 import com.angelmusic.service.ActivationCodeService;
 import com.angelmusic.utils.HttpCode;
 import com.jfinal.ext.route.ControllerBind;
+import com.jfinal.kit.Ret;
 import com.jfinal.kit.StrKit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,13 +32,21 @@ public class ActivationCodeController extends BaseController {
         }
 
         final String activationCode = getPara("activationCode");
+        final String account = getPara("account");
+
+        //参数校验
         if (StrKit.isBlank(activationCode)) {
-            error(HttpCode.ACTIVATION_CODE_EMPTY, HttpCode.ACTIVATION_CODE_EMPTY_WORD);
+            renderJson(Ret.create("code", HttpCode.ACTIVATION_CODE_EMPTY).getData());
+            return;
+        }
+
+        if (StrKit.isBlank(account)) {
+            renderJson(Ret.create("code", HttpCode.USER_ACCOUNT_EMPTY).getData());
             return;
         }
 
         //激活码激活
-        renderJson(ActivationCodeService.ME.activateCode(activationCode));
+        renderJson(ActivationCodeService.ME.activateCode(activationCode, account).getData());
 
         LOGGER.info("[leave activationCode method]");
     }

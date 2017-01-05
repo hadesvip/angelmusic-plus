@@ -1,11 +1,15 @@
 package com.angelmusic.service;
 
 import com.angelmusic.dao.model.ActivationCode;
+import com.angelmusic.dao.model.OrderRecord;
+import com.angelmusic.dao.model.Topic;
 import com.angelmusic.utils.Constant;
 import com.angelmusic.utils.HttpCode;
 import com.jfinal.aop.Before;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.tx.Tx;
+
+import java.util.UUID;
 
 /**
  * 激活码服务层
@@ -22,7 +26,7 @@ public class ActivationCodeService {
      * @return
      */
     @Before(Tx.class)
-    public Ret activateCode(String code) {
+    public Ret activateCode(String code, String account) {
 
         //获取激活码信息
         final ActivationCode activationCodeInfo = ActivationCode.ME.getActivationCodeByCode(code);
@@ -36,9 +40,21 @@ public class ActivationCodeService {
             return Ret.create("code", HttpCode.ACTIVATION_CODE_ACTIVATED);
         }
 
-        //激活
+        //更新激活码状态并生成订单
+        String orderId = UUID.randomUUID().toString().replaceAll("-", "");
+        saveActivationCode(orderId, code, account);
+
+        //更新订单的权益开始和结束时间
+        OrderService.ME.calcOrderStartEndTime(account, Constant.ORDER_TYPE_ACTIVATECODE, code, orderId, Constant.PAY_SUCESS);
+
+        //算出解锁主题
+        Topic topic = OrderService.calcUserTopicNum(account);
+        return Ret.create("code", HttpCode.SUCCESS).put("detail", topic);
+    }
+
+    @Before(Tx.class)
+    private void saveActivationCode(String orderId, String code, String account) {
         ActivationCode.ME.updateActivationCodeStatus(code);
-        
-        return null;
+        OrderRecord.ME.saveOrderRecord(orderId, account, "0", code, Constant.ORDER_TYPE_ACTIVATECODE, Constant.PAY_SUCESS);
     }
 }

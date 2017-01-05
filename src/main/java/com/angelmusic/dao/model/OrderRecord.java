@@ -82,7 +82,7 @@ public class OrderRecord extends Model<OrderRecord> {
      * @param orderId   订单编号
      * @param payResult 支付结果
      */
-    public boolean updatePayResult(String orderId, String payResult, Date startTime, Date endTime) {
+    public boolean updatePayResult(String orderId, int payResult, Date startTime, Date endTime) {
         return Db.update(PlusSqlKit.sql("order.updateOrderRecord"), payResult, startTime, endTime, orderId) > 0;
     }
 
