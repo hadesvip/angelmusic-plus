@@ -25,6 +25,14 @@ public class ContentMissionController extends BaseController {
     public void updateContentMission() {
         LOGGER.info("[invoke updateContentMission]");
 
+        //只支持POST请求
+//        String method = getRequest().getMethod();
+//        if (method.equalsIgnoreCase("get")) {
+//            renderJson(Ret.create("code", HttpCode.HTTP_ONLY_SUPPORT_POST).getData());
+//            return;
+//        }
+
+
         //用户手机号，主题内容编号，类型
         String account = getPara("account");
         int contentId = getParaToInt("contentId");

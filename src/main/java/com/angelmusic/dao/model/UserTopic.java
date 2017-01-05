@@ -39,7 +39,7 @@ public class UserTopic extends Model<UserTopic> {
      */
     public boolean updateUserTopic(int id, int topicCount) {
         return
-                Db.update(PlusSqlKit.sql("userTopic.updateUserTopic"), topicCount, id) > 1;
+                Db.update(PlusSqlKit.sql("userTopic.updateUserTopic"), topicCount, id) > 0;
     }
 
 }

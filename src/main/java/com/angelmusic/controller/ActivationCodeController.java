@@ -27,7 +27,7 @@ public class ActivationCodeController extends BaseController {
 
         String method = getRequest().getMethod();
         if (method.equalsIgnoreCase("get")) {
-            error("此接口只支持post请求");
+            renderJson(Ret.create("code", HttpCode.HTTP_ONLY_SUPPORT_POST).getData());
             return;
         }
 

@@ -70,5 +70,8 @@ public interface HttpCode {
     //订单不存在
     String ORDER_NOT_EXIST = "201227";
 
+    //内容不存在
+    String CONTENT_NOT_EXIST = "201228";
+
 
 }

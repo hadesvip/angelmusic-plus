@@ -2,6 +2,7 @@ package com.angelmusic.dao.model;
 
 import com.angelmusic.plugin.sql.PlusSqlKit;
 import com.jfinal.ext.plugin.tablebind.TableBind;
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 
 /**
@@ -43,5 +44,16 @@ public class ContentMission extends Model<ContentMission> {
                         .set("account", account)
                         .set("content_id", topicContentId)
                         .save();
+    }
+
+    /**
+     * 更新内容关卡
+     *
+     * @param account 　用户账号
+     * @return
+     */
+    public boolean updateContentMission(String account, int contentId) {
+        return
+                Db.update(PlusSqlKit.sql("contentMission.updateContentMission"), contentId, account) > 0;
     }
 }

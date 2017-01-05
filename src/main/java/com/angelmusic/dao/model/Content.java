@@ -1,13 +1,10 @@
 package com.angelmusic.dao.model;
 
 import com.angelmusic.plugin.sql.PlusSqlKit;
-import com.angelmusic.utils.Constant;
 import com.jfinal.ext.plugin.tablebind.TableBind;
 import com.jfinal.plugin.activerecord.Model;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 内容
@@ -17,17 +14,6 @@ import java.util.Map;
 public class Content extends Model<Content> {
 
     public static final Content ME = new Content();
-
-    /**
-     * 获取上一个content
-     *
-     * @return
-     */
-    public Content getPrevContent(int topicId, int contentId) {
-
-        return findFirst(PlusSqlKit.sql("content.prevContent"), contentId, topicId);
-    }
-
 
     /**
      * @param topicId 主题
@@ -48,6 +34,15 @@ public class Content extends Model<Content> {
     }
 
     /**
+     * 获取内容
+     *
+     * @return
+     */
+    public Content getContent(int contentId) {
+        return findFirst(PlusSqlKit.sql("content.getContent"), contentId);
+    }
+
+    /**
      * 查询给点主题的所有内容
      *
      * @param array
@@ -57,7 +52,7 @@ public class Content extends Model<Content> {
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT c.topic_id, c.content_id, c.name content_name, c.free content_free, c.course_name, c.course_video_path," +
                 " c.game_name FROM am_content c WHERE c.topic_id in (");
-        for (int i : array){
+        for (int i : array) {
             sb.append("?,");
         }
         sb.deleteCharAt(sb.length() - 1);
