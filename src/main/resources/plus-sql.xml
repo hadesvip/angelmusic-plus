@@ -71,9 +71,6 @@
     <sqlGroup name="content">
         <sql id="getTopicContentList">
             SELECT
-            t.topic_id,
-            t.name,
-            t.free topic_free,
             c.content_id,
             c.name content_name,
             c.free content_free,
@@ -81,12 +78,26 @@
             c.course_video_path,
             c.game_name
             FROM
-            am_topic t
-            LEFT JOIN
-            am_content c ON t.topic_id = c.topic_id
-            WHERE t.topic_id = ?
+            am_content c
+            WHERE c.topic_id = ?
             ORDER BY c.`order`
         </sql>
+
+        <sql id="getAllContentByTids">
+            SELECT
+            c.topic_id,
+            c.content_id,
+            c.name content_name,
+            c.free content_free,
+            c.course_name,
+            c.course_video_path,
+            c.game_name
+            FROM
+            am_content c
+            WHERE c.topic_id in (?)
+            ORDER BY c.topic_id,c.`order`
+        </sql>
+
         <sql id="prevContent">
             <![CDATA[
                 select * from am_content c left join am_topic_content tc  on c.content_id = tc.content_id  where c.content_id < ? and  topic_id=?  order by tc.`order` desc limit 1
